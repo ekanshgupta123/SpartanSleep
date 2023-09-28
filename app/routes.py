@@ -1,7 +1,7 @@
 from app import spartan_app
 from flask import render_template
 
-@spartan_app.route('/base',methods=['Get','Post'])
+@spartan_app.route('/',methods=['Get','Post'])
 def homePage():
     return render_template('index.html')
 
