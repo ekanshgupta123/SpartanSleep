@@ -1,16 +1,24 @@
 from flask import Flask
-from flaskext.mysql import MySQL
+import os
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from jinja2 import Environment
 
 spartan_app = Flask(__name__)
 spartan_app.static_url_path = '/static'
 spartan_app.static_folder = 'static'
 
-spartan_app.config['MYSQL_DATABASE_USER'] = 'root'
-spartan_app.config['MYSQL_DATABASE_PASSWORD'] = 'pass'
-spartan_app.config['MYSQL_DATABASE_DB'] = 'SpartanSleep'
-spartan_app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+basedir = os.path.abspath(os.path.dirname(__file__))
 
-mysql = MySQL()
-mysql.init_app(spartan_app)
+spartan_app.config.update(
+    SECRET_KEY='this-is-a-secret',
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db'),   #sets location of database
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+)
+
+db = SQLAlchemy(spartan_app)
+migrate = Migrate(spartan_app,db)
+
 
 from app import routes
