@@ -45,7 +45,7 @@
             <div class="search-icon  search-switch">
                 <i class="icon_search"></i>
             </div>
-            <div class="header-configure-area">
+            <!-- <div class="header-configure-area">
                 <div class="language-option">
                     <span>Account <i class="fa fa-angle-down"></i></span>
                     <div class="flag-dropdown">
@@ -56,10 +56,10 @@
                     </div>
                 </div>
                 <a href="#" class="bk-btn">Booking Now</a>
-            </div>
+            </div> -->
             <nav class="mainmenu mobile-menu">
                 <ul>
-                    <li class="active"><a href="/base">Home</a></li>
+                    <li class="active"><a href="{{url_for('homePage')}}">Home</a></li>
                     <li><a href="./rooms.html">Rooms</a></li>
                     <li><a href="./about-us.html">About Us</a></li>
                     <li><a href="./pages.html">Pages</a>
@@ -71,7 +71,12 @@
                         </ul>
                     </li>
                     <li><a href="./blog.html">News</a></li>
-                    <li><a href="./contact.html">Contact</a></li>
+                    <li><a href="{{url_for('login')}}">Account</a></li>
+                        <ul class="dropdown">
+                            <li><a href="{{url_for('login')}}">Login</a></li>
+                            <li><a href="#">Sign Up</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             <div id="mobile-menu-wrap"></div>
@@ -80,7 +85,7 @@
 
         <!-- Header Section Begin -->
         <header class="header-section">
-            <div class="top-nav">
+            <!-- <div class="top-nav">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-6">
@@ -102,7 +107,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="menu-item">
                 <div class="container">
                     <div class="row">
@@ -117,7 +122,7 @@
                             <div class="nav-menu">
                                 <nav class="mainmenu">
                                     <ul>
-                                        <li class="active"><a href="/base">Home</a></li>
+                                        <li class="active"><a href="{{url_for('homePage')}}">Home</a></li>
                                         <li><a href="./rooms.html">Rooms</a></li>
                                         <li><a href="./about-us.html">About Us</a></li>
                                         <li><a href="./pages.html">Pages</a>
@@ -129,7 +134,13 @@
                                             </ul>
                                         </li>
                                         <li><a href="./blog.html">News</a></li>
-                                        <li><a href="./contact.html">Contact</a></li>
+                                        <li><a href="{{url_for('login')}}">Account</a>
+                                            <ul class="dropdown">
+                                                <li><a href="{{url_for('login')}}">Login</a></li>
+                                                <li><a href="{{url_for('signup')}}">Sign Up</a></li>
+                                            </ul>
+                                        </li>
+
                                     </ul>
                                 </nav>
                                 <div class="nav-right search-switch">

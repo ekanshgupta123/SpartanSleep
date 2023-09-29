@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+
+<div class="signup-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="signup-form">
+                    <h2>Create your account</h2>
+                    <form action="{{ url_for('signup')}}" method="POST">
+                        {{form.hidden_tag()}}
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            {{ form.firstName(class_='form-control', placeholder = 'First Name', size=32)}}
+                            {% for error in form.firstName.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            {{ form.lastName(class_='form-control', placeholder = 'Last Name', size=32)}}
+                            {% for error in form.lastName.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            {{ form.email(class_='form-control', placeholder = 'Email Address', size=32)}}
+                            {% for error in form.email.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            {{ form.password(class_='form-control', placeholder = 'Password', size=32)}}
+                            {% for error in form.password.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            {{ form.confirmPassword(class_='form-control', placeholder = 'Confirm Password', size=32)}}
+                            {% for error in form.confirmPassword.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                        {{ form.csrf_token }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

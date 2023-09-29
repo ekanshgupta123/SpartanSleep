@@ -2,7 +2,8 @@
 
 {% block mycontent %}
 
-<!-- login form --!>
+<!-- login form -->
+
 	<style>
                 h2 {
                 text-align: center;
@@ -12,6 +13,16 @@
                 }
 
         </style>
+
+                {% for message in get_flashed_messages() %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                {% endfor %}
+
                 <div class = "container">
                 <div class = "col-lg-6">
                         <h2>Login</h2>
