@@ -4,12 +4,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from jinja2 import Environment
+import os.path
+
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 spartan_app = Flask(__name__)
 spartan_app.static_url_path = '/static'
 spartan_app.static_folder = 'static'
-
-basedir = os.path.abspath(os.path.dirname(__file__))
 
 spartan_app.config.update(
     SECRET_KEY='this-is-a-secret',
@@ -21,4 +23,8 @@ db = SQLAlchemy(spartan_app)
 migrate = Migrate(spartan_app,db)
 
 
-from app import routes
+login = LoginManager(spartan_app)
+login.login_view = 'login'
+
+from app import routes, models
+
