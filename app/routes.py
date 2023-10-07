@@ -43,10 +43,11 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user is None and user.verify_password(form.password.data):
-            login_user(user,form.remember_me.data)
+        if user is None and not user.verify_password(form.password.data):
             flash("Wrong password or email")
             return redirect('/login')
+            
+        login_user(user,form.remember_me.data)
         return redirect('/home')
     return render_template('login.html',form=form,authorized=current_user.is_authenticated)
 
