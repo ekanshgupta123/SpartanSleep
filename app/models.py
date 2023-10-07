@@ -10,8 +10,8 @@ class User(db.Model, UserMixin):
     lastName = db.Column(db.String(256), nullable=False)
     email = db.Column(db.String(256), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
+    
 
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-    
