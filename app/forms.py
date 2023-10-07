@@ -24,3 +24,10 @@ class SignupForm(FlaskForm):
         email = User.query.filter_by(email = email.data).first()
         if email is not None:        #email matches with one in a database
             raise ValidationError("Email already taken.")
+    
+
+class LoginForm(FlaskForm):
+    email=StringField('Email', validators=[DataRequired()])
+    password=PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember me')
+    submit=SubmitField('Sign in')
