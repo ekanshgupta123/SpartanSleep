@@ -134,12 +134,22 @@
                                             </ul>
                                         </li>
                                         <li><a href="./blog.html">News</a></li>
+                                        {% if not current_user.is_authenticated %}
                                         <li><a href="{{url_for('login')}}">Account</a>
                                             <ul class="dropdown">
                                                 <li><a href="{{url_for('login')}}">Login</a></li>
                                                 <li><a href="{{url_for('signup')}}">Sign Up</a></li>
                                             </ul>
+                                            
                                         </li>
+                                        {% else %}
+                                        <li><a href="{{url_for('homePage')}}">Welcome back {{current_user.firstName}} !</a>
+                                            <ul class="dropdown">
+                                                <li><a href="{{url_for('logout')}}">Log out</a></li>
+                                                <li><a href="">Delete Account</a></li>
+                                            </ul>
+                                        </li>
+                                        {% endif %}
 
                                     </ul>
                                 </nav>

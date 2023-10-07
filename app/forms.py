@@ -26,7 +26,6 @@ class SignupForm(FlaskForm):
         if email is not None:        #email matches with one in a database
             raise ValidationError("Email already taken.")
 
-
 class LoginForm(FlaskForm):
     email=StringField('Email', validators=[DataRequired()])
     password=PasswordField('Password', validators=[DataRequired()])
