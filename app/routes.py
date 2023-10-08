@@ -1,33 +1,12 @@
 from app import spartan_app, db
-from flask import render_template, redirect, flash, request, url_for, session
-from app.forms import SignupForm
+from flask import render_template, redirect, flash, request, url_for, session, jsonify
+from app.forms import SignupForm, SearchForm
 from app.forms import LoginForm
 from app.models import User
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import timedelta
-import datetime
-import subprocess
-import os
-import time
-import hashlib
+import pycountry
 import requests
-
-
-#api information for hotelbeds
-api_key = "7e71a1cf29aebcaed738be43eb126e12"
-secret = "d0050074ba"
-datenow = str(datetime.datetime.now().timestamp())
-datenow = bytes(datenow, 'utf-8')
-
-string= str(api_key).strip()+str(secret).strip()+str(int(time.time())).strip()
-
-signature= hashlib.sha256(string.encode()).hexdigest()
-
-headers = {
-    'Accept': 'application/json',
-    'Api-key': api_key,
-    'X-Signature': signature,
-}
 
 #database initialization
 @spartan_app.before_request
@@ -64,83 +43,44 @@ def logout():
     logout_user()
     return redirect('/login')
 
+#getting request token
+def get_access_token():
+    global access_token
 
-#checking to see if api is up
-@spartan_app.route('/execute_script', methods=['GET'])
-def execute_script():
-    # print(signature)
+    #api information for amadeus
+    client_id = 'eLWoFfHf0ngMXRZoClATedEWUIRAsFDB'
+    client_secret = '0oEEu6nk1da8MqeF'
+    token_url = "https://test.api.amadeus.com/v1/security/oauth2/token"
 
-    # Replace with the actual API endpoint
-    url = 'https://api.test.hotelbeds.com/hotel-api/1.0/status'
-
-    # Make the API request
-    return requests.get(url, headers=headers).json()
-
-
-#show hotels path
-@spartan_app.route('/hotels')
-def hotel():
-    url = "https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels"
-
-    hotel_codes = [1, 2]
-
-    query_params = {
-        "codes": ",".join(map(str, hotel_codes)),
-        # "apikey": api_key,
+    data = {
+        "grant_type": "client_credentials",
+        "client_id": client_id,
+        "client_secret": client_secret
     }
 
-    response = requests.get(url, headers = headers, params=query_params)
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    response = requests.post(token_url, headers=headers, data=data)
 
-
-    images = []
     if response.status_code == 200:
-        hotel_images = {}  # Create a dictionary to associate images with hotels
-
-        hotel_data = response.json()
-
-        # Get the list of hotels
-        hotels = hotel_data.get("hotels")
-
-        hotel_images = {}  # Create a dictionary to associate images with hotels
-
-
-        if hotels:
-            for hotel in hotels:
-                hotel_code = hotel.get("code")
-                images = hotel.get("images")
-                
-                if hotel_code and images:
-                    # Add images to the corresponding hotel in the dictionary
-                    if hotel_code not in hotel_images:
-                        hotel_images[hotel_code] = []
-                    hotel_images[hotel_code].extend(images)
-        
-        hotel_path_dict = {}
-        baseUrl = "http://photos.hotelbeds.com/giata/"
-
-        for hotel_key, images_list in hotel_images.items():
-            hotel_image_paths = []
-            
-            # Iterate through the list of images for this hotel
-            for image in images_list:
-                path = baseUrl + image.get("path")  # Access the "path" key in each image dictionary
-                hotel_image_paths.append(path)
-            
-            # Add the list of image paths to the dictionary with the hotel key as the key
-            hotel_path_dict[hotel_key] = hotel_image_paths
-
-        for key, img in hotel_path_dict.items():
-            print(key, img)
-        return hotel_path_dict
+        # Parse the JSON response to get the access token
+        access_token = response.json()["access_token"]
+        return access_token
     else:
-        # Handle the case where the API request failed
-        print(f"API request failed with status code {response.status_code}")
-        print(response.text)
-        error_response = jsonify({"error": "API request failed"}), 500  # Create an error response as JSON with status code 500
-        return error_response
+        return None
 
+# seeing if api is up
+# @spartan_app.route('/execute_script', methods=['GET', 'POST'])
+# def execute():
+#     access_token = get_access_token()
 
-#sign up path
+#     if access_token:
+#         return jsonify({"access_token": access_token})
+#     else:
+#         return jsonify({"error": "Failed to obtain access token"})
+
+# sign up path
 @spartan_app.route('/signup', methods=['GET', 'POST'])
 def signup():
     current_form = SignupForm()
@@ -157,9 +97,56 @@ def signup():
         return redirect(url_for('login'))
     return render_template('signup.html', form=current_form,authorized=current_user.is_authenticated)
 
+
+# home path
 @spartan_app.route("/home")
 @login_required
 def home():
     if(current_user.is_authenticated):
         return render_template('home.html', authorized=current_user.is_authenticated)
     return render_template('home.html', authorized=current_user.is_authenticated)
+
+
+# search for cities
+@spartan_app.route('/search', methods=['POST'])
+def search():
+
+    search_term = request.form.get('text', '').strip()
+    
+    # Check if the search term is empty
+    if not search_term:
+        return jsonify([])  # Return an empty list if no search term is provided
+    
+    # Define the Amadeus API endpoint and API key
+    amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/cities?keyword={search_term}&max=10"
+    
+    # Set up headers with the API key
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+
+    try:
+        # Send a GET request to the Amadeus API
+        response = requests.get(amadeus_api_url, headers=headers)
+        
+        if response.status_code == 200:
+            data = response.json()
+            cities = data.get('data', [])
+            
+            city_and_country = []  # Create a list to store city and country info
+            
+            for city in cities:
+                city_name = city['name']
+                country_code = city['address']['countryCode']
+                country_name = pycountry.countries.get(alpha_2=country_code).name
+                
+                city_and_country.append({"city": city_name, "country": country_name})
+            
+            return jsonify(city_and_country)  # Return city and country info as JSON
+        else:
+            return jsonify([])  # Return an empty list if there's an issue with the API
+    except Exception as e:
+        print(f"Error fetching data from Amadeus API: {e}")
+        return jsonify([])  # Return an empty list in case of an error
+
+

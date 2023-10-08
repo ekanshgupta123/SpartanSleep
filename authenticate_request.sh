@@ -1,9 +1,6 @@
 #!/bin/bash 
-apiKey="7e71a1cf29aebcaed738be43eb126e12"
-secret="d0050074ba"
-curl -i \
--X GET \
--H 'Accept:application/json' \
--H 'Api-key:'$apiKey'' \
--H 'X-Signature:'$(echo -n ${apiKey}${secret}$(date +%s)|sha256sum|awk '{ print $1}')'' \
-https://api.test.hotelbeds.com/hotel-api/1.0/status
+client_id = 'eLWoFfHf0ngMXRZoClATedEWUIRAsFDB'
+client_secret = '0oEEu6nk1da8MqeF'
+curl "https://test.api.amadeus.com/v1/security/oauth2/token" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}"
