@@ -19,11 +19,12 @@ def create_tables():
     db.create_all()
 
 
-#homepage path
+# homepage path
 @spartan_app.route('/', methods=['GET','POST'])
 def homePage():
     return render_template('index.html')
 
+# login path
 @spartan_app.route('/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
@@ -37,6 +38,7 @@ def login():
         return redirect(url_for('homePage'))
     return render_template('login.html',form=form,authorized=current_user.is_authenticated)
 
+# logout path
 @spartan_app.route("/logout")
 def logout():
     db.session.commit()
@@ -150,3 +152,11 @@ def search():
         return jsonify([])  # Return an empty list in case of an error
 
 
+# rooms path
+
+# about us path
+@spartan_app.route('/about')
+def aboutUs():
+    return render_template('about.html')
+
+# profile path
