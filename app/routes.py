@@ -64,6 +64,21 @@ def logout():
     logout_user()
     return redirect('/login')
 
+@spartan_app.route('/delete/<int:id>')
+def delete(id):
+    # attempt to get the user by provided id, and if it doesn't exist -> return 404 error
+    user = User.query.get_or_404(id)
+
+    try:
+        # Delete the user from the database:
+        db.session.delete(user)
+        db.session.commit()
+
+        # Redirect the user to the home page:
+        return redirect(url_for('home'))
+    except:
+        # If there was 1 error while deleting the user's account, display 1 error message:
+        return 'There was something wrong when deleting your account!'
 
 #checking to see if api is up
 @spartan_app.route('/execute_script', methods=['GET'])
