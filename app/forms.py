@@ -32,3 +32,8 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me')
     submit=SubmitField('Sign in')
 
+class SearchForm(FlaskForm):
+    #creating fields for searching
+    searchInput = StringField('Search For User', validators = [DataRequired()])
+
+
