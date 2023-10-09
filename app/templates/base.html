@@ -28,6 +28,21 @@
         {% block head %}
         {% endblock %}
     </head>
+    <style>
+        .ui-menu-item {
+            list-style: none; /* Remove default list-style */
+            padding: 10px; /* Add padding for spacing */
+            background-color: #f5f5f5; /* Background color */
+            border-bottom: 1px solid #ddd; /* Separator line */
+            cursor: pointer; /* Pointer cursor for interactivity */
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+        }
+        
+        /* Hover effect for menu items */
+        .ui-menu-item:hover {
+            background-color: #e0e0e0; /* Background color on hover */
+        }
+    </style>
     <body>
         <!-- Page Preloder -->
         <div id="preloder">
@@ -196,7 +211,8 @@
                             if (data.length > 0) {
                                 data.forEach(function (result) {
                                     // Access the city and country properties and display them
-                                    searchResults.append(`<li>${result.city}, ${result.country}</li>`);
+                                const menuItem = `<li class="ui-menu-item">${result.city}, ${result.country}</li>`;
+                                searchResults.append(menuItem);
                                 });
                             } else {
                                 searchResults.append("<li>No results found</li>");
