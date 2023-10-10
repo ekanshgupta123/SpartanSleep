@@ -169,8 +169,8 @@ def home():
 # rooms path
 
 # about us path
-@spartan_app.route('/about')
+@spartan_app.route('/aboutUs')
 def aboutUs():
-    return render_template('about.html')
+    return render_template('/about-us.html')
 
 # profile path
