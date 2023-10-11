@@ -203,3 +203,8 @@ def aboutUs():
     return render_template('/about-us.html')
 
 # profile path
+
+# manage reservations path
+@spartan_app.route('/reservations')
+def reservations():
+    return render_template('/reservations.html')
