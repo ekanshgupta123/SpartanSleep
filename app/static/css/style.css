@@ -645,28 +645,6 @@ ul, ol {
 /*---------------------
   About US
 -----------------------*/
-
-.about-text {
-	text-align: center;
-	padding: 0 35px;
-}
-.about-text p {
-	color: #595960;
-	font-weight: 500;
-}
-.about-text p.f-para {
-	margin-bottom: 10px;
-}
-.about-text p.s-para {
-	margin-bottom: 35px;
-}
-.about-text .about-btn {
-	color: #19191a;
-}
-.about-pic img {
-	min-width: 100%;
-}
-
 * {
 	font-family: Nunito, sans-serif;
   }
@@ -850,9 +828,12 @@ ul, ol {
 	margin-left: 0px;
   }
   
-  .mainVideo {
+  /*------------------- 
+  Logo Section
+  ------------------ */
+  .logo {
 	width: 85%;
-	height: 450px;
+	height: 85%;
 	margin-top: -30px;
 	margin-right: 0px;
 	margin-bottom: 0px;
@@ -863,7 +844,7 @@ ul, ol {
 	border-bottom-left-radius: 10px;
   }
   
-  .videoContainer {
+  .logoContainer {
 	width: 46%;
 	height: 600px;
 	display: flex;
@@ -876,7 +857,7 @@ ul, ol {
 	padding-left: 10px;
   }
   
-  .mainVideo {
+  .logo {
 	z-index: 10;
   }
   
@@ -1263,6 +1244,17 @@ ul, ol {
 	max-width: 1200px;
   }
 
+  /* Ensure team photos are always squares */
+  .card img {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1/1;
+  }
+
+  /* Add spacing between image and text */
+  .container h2 {
+	margin-top: 10px;
+  }
   /* Vertically center the team cards within the row */
 	.row {
     	display: flex;
@@ -1297,59 +1289,7 @@ ul, ol {
   .button:hover {
 	background-color: #555;
   } 
-/*---------------------
-  Service Section
------------------------*/
 
-.services-section {
-	padding-bottom: 60px;
-	border-top: 1px solid #e5e5e5;
-	clear: both;
-}
-.services-section .section-title {
-	margin-bottom: 36px;
-}
-.service-item {
-	text-align: center;
-	padding: 30px 35px 18px;
-	-webkit-transition: all 0.3s;
-	-o-transition: all 0.3s;
-	transition: all 0.3s;
-}
-.service-item:hover {
-	background: #dfa974;
-}
-.service-item:hover i {
-	color: #ffffff;
-}
-.service-item:hover h4 {
-	color: #ffffff;
-}
-.service-item:hover p {
-	color: #ffffff;
-}
-.service-item i {
-	display: inline-block;
-	color: #dfa974;
-	-webkit-transition: all 0.3s;
-	-o-transition: all 0.3s;
-	transition: all 0.3s;
-}
-.service-item h4 {
-	color: #19191a;
-	font-size: 22px;
-	margin-bottom: 15px;
-	margin-top: 10px;
-	-webkit-transition: all 0.3s;
-	-o-transition: all 0.3s;
-	transition: all 0.3s;
-}
-.service-item p {
-	color: #707079;
-	-webkit-transition: all 0.3s;
-	-o-transition: all 0.3s;
-	transition: all 0.3s;
-}
 /*------------------------
   Home Page Room Section 
 -------------------------*/
