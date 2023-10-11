@@ -212,8 +212,17 @@
                             if (data.length > 0) {
                                 data.forEach(function (result) {
                                     // Access the city and country properties and display them
-                                const menuItem = `<li class="ui-menu-item">${result.city}, ${result.country}</li>`;
+                                // const menuItem = `<li class="ui-menu-item">${result.city}, ${result.country}</li>`;
+                                const menuItem = `<li class="ui-menu-item"><a href="#" data-city-code="${result.cityCode}">${result.city}, ${result.country}</a></li>`;
                                 searchResults.append(menuItem);
+                                });
+
+                                // Attach click event handlers to the menu items
+                                const menuItems = searchResults.find(".ui-menu-item a");
+                                menuItems.on("click", function (event) {
+                                    event.preventDefault(); // Prevent the default link behavior
+                                    const cityCode = $(this).data("city-code");
+                                    redirectToPage(cityCode);
                                 });
                             } else {
                                 searchResults.append("<li>No results found</li>");
@@ -225,7 +234,20 @@
                     });
                 });
             });
-        </script>  
+
+    function redirectToPage(cityCode) {
+    // Ensure that cityCode is not undefined
+        if (cityCode !== undefined) {
+            // You can use the cityCode here for further actions or redirection
+            console.log("Clicked on cityCode: " + cityCode);
+
+            // Example: Redirect to a new page with the cityCode as a query parameter
+            window.location.href = `/hotels/${cityCode}`;
+        } else {
+            console.error("cityCode is undefined");
+        }
+    }
+    </script>  
         {% block mycontent %}
         
         {% endblock %}
