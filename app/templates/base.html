@@ -23,10 +23,26 @@
         <link rel="stylesheet" href="{{ url_for('static',filename='css/magnific-popup.css') }}" type="text/css">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/slicknav.min.css') }}" type="text/css">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" type="text/css">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        
         {% block head %}
         {% endblock %}
     </head>
+    <style>
+        .ui-menu-item {
+            list-style: none; /* Remove default list-style */
+            padding: 10px; /* Add padding for spacing */
+            background-color: #f5f5f5; /* Background color */
+            border-bottom: 1px solid #ddd; /* Separator line */
+            cursor: pointer; /* Pointer cursor for interactivity */
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+        }
+        
+        /* Hover effect for menu items */
+        .ui-menu-item:hover {
+            background-color: #e0e0e0; /* Background color on hover */
+        }
+    </style>
     <body>
         <!-- Page Preloder -->
         <div id="preloder">
@@ -61,7 +77,7 @@
                 <ul>
                     <li class="active"><a href="{{url_for('homePage')}}">Home</a></li>
                     <li><a href="./rooms.html">Rooms</a></li>
-                    <li><a href="./about-us.html">About Us</a></li>
+                    <li><a href="{{ url_for('aboutUs') }}">About Us</a></li>
                     <li><a href="./pages.html">Pages</a>
                         <ul class="dropdown">
                             <li><a href="./room-details.html">Room Details</a></li>
@@ -145,14 +161,14 @@
                                         {% else %}
                                         <li><a href="{{url_for('homePage')}}">Welcome back {{current_user.firstName}} !</a>
                                             <ul class="dropdown">
+                                                <li><a href="app/templates/reservations.html">Manage Reservations</a></li>
                                                 <li><a href="{{url_for('logout')}}">Log out</a></li>
                                                 <li><a href="/delete/{{current_user.id}}">Delete Account</a></li>
                                             </ul>
                                         </li>
                                         {% endif %}
-
                                     </ul>
-                                </nav>
+                                </nav>                             
                                 <div class="nav-right search-switch">
                                     <i class="icon_search"></i>
                                 </div>
@@ -169,12 +185,47 @@
             <div class="h-100 d-flex align-items-center justify-content-center">
                 <div class="search-close-switch"><i class="icon_close"></i></div>
                 <form class="search-model-form">
-                    <input type="text" id="search-input" placeholder="Search here.....">
+                    <input type="text" id="livebox" placeholder="Search for a City...">
+                    <p id="datalist"></p>              
                 </form>
             </div>
         </div>
-
-
+        <script>
+            $(document).ready(function () {
+                $("#livebox").on("input", function (e) {
+                    $("#datalist").empty();
+                    const searchTerm = $(this).val();
+                    
+                    // Check if the search term is empty
+                    if (!searchTerm) {
+                        return;
+                    }
+        
+                    $.ajax({
+                        method: "POST",
+                        url: "/search", // search
+                        data: { text: searchTerm },
+                        success: function (data) {
+                            const searchResults = $("#datalist");
+                            searchResults.empty();
+                            
+                            if (data.length > 0) {
+                                data.forEach(function (result) {
+                                    // Access the city and country properties and display them
+                                const menuItem = `<li class="ui-menu-item">${result.city}, ${result.country}</li>`;
+                                searchResults.append(menuItem);
+                                });
+                            } else {
+                                searchResults.append("<li>No results found</li>");
+                            }
+                        },
+                        error: function () {
+                            $("#datalist").html("<li>Error fetching data</li>");
+                        }
+                    });
+                });
+            });
+        </script>  
         {% block mycontent %}
         
         {% endblock %}
