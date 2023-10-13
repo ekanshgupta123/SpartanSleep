@@ -14,7 +14,12 @@
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Booking Your Hotel</h3>
-                        <form action="#">
+                        <form action="/search" method="POST">
+                            <!-- City search -->
+                            <div class="city-option">
+                                <label for="city">Search for a city:</label>
+                                <input type="text" class="form-control" id="search-input" name="text" placeholder="Enter a city name">
+                            </div>
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
                                 <input type="text" class="date-input" id="date-in">
@@ -39,7 +44,8 @@
                                     <option value="">2 Room</option>
                                 </select>
                             </div>
-                            <button type="submit">Check Availability</button>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <!--<a href="{{ url_for('search') }}" class="primary-btn search-btn">Check Availability</a>-->
                         </form>
                     </div>
                 </div>

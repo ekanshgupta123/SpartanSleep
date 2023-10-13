@@ -127,7 +127,7 @@ ul, ol {
 .primary-btn {
 	display: inline-block;
 	font-size: 13px;
-	color: #ffffff;
+	color: black;
 	text-transform: uppercase;
 	letter-spacing: 2px;
 	font-weight: 700;
@@ -593,7 +593,7 @@ ul, ol {
 	margin-top: 0;
 	width: 100%;
 }
-.booking-form form button {
+.booking-form .primary-btn.search-btn {
 	display: block;
 	font-size: 14px;
 	text-transform: uppercase;
@@ -605,6 +605,11 @@ ul, ol {
 	width: 100%;
 	height: 46px;
 	margin-top: 30px;
+}
+
+.booking-form .primary-btn:hover {
+	background: #dfa974;
+	color: #ffffff;
 }
 .hero-slider {
 	position: absolute;
@@ -645,6 +650,10 @@ ul, ol {
 /*---------------------
   About US
 -----------------------*/
+.about-text {
+	text-align: center;
+}
+
 * {
 	font-family: Nunito, sans-serif;
   }
@@ -2014,6 +2023,14 @@ ul, ol {
 	color: #19191a;
 	margin-bottom: 30px;
 }
+.room-booking form .city-option {
+	position: relative;
+	margin-bottom: 15px;
+}
+.city-option {
+	display: flex;
+	flex-direction: column;
+  }
 .room-booking form .check-date {
 	position: relative;
 	margin-bottom: 15px;
