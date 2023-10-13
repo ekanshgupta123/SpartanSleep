@@ -2908,3 +2908,83 @@ ul, ol {
 		margin-bottom: 10px;
 	}
 }
+
+/* ---------------------
+ Reservations Page
+-----------------------*/
+/*.reservation-content {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	overflow-y: auto;
+	margin-left: 20px;
+	margin-right: 20px;
+  }
+  
+  .reservation-content .row {
+	margin-bottom: 20px;
+  }
+  
+  .reservation-content .card {
+	width: 100%;
+	float: none;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	padding: 20px;
+	margin-bottom: 20px;
+	transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .reservation-content .col-md-2:first-child {
+	padding-right: 10px;
+  }
+  
+  .reservation-content .col-md-2:last-child {
+	padding-left: 10px;
+  }*/
+
+.reservations-container {
+    text-align: center;
+    padding: 20px;
+	margin-left: 175px;
+	margin-right: 175px;
+}
+
+.booking-card {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-booking-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 20px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+}
+
+.welcome-card {
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	background-color: rgb(220, 220, 220); /* Change the background color */
+	margin-left: 200px;
+	margin-right: 200px;
+	padding: 20px;
+	border-radius: 10px;
+  }
+
+
+
+  
