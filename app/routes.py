@@ -173,6 +173,8 @@ def hotel_search():
             hotel_data = response.json()
 
             if isinstance(hotel_data, (dict, list)):
+                # Render hotel-search.html template with the hotel data
+                #return render_template('hotel-search.html', hotel_data)
                 return jsonify(hotel_data)
             else:
                 return "Invalid hotel data format"
@@ -211,3 +213,8 @@ def aboutUs():
 @spartan_app.route('/reservations')
 def reservations():
     return render_template('/reservations.html')
+
+# hotel-search path
+@spartan_app.route('/hotelzzz')
+def hotel_searchs():
+    return render_template('/hotel-search.html')
