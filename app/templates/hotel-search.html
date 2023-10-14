@@ -1,8 +1,26 @@
 {% extends "base.html" %}
 
 {% block mycontent %}
+<h1>There are currently {{ hotel_data.meta.count }} hotels available
+     in the {{ hotel_data.meta.cityCode }} area</h1>
+<div class="hotel-cards">
+  {% for hotel in hotel_data.data %}
+    <div class="hotel-card">
+      <div class="hotel-card-image"></div>
+      <div class="hotel-card-details">
+        <h3 class="hotel-card-name">{{ hotel.name }}</h3>
+        <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
+        <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+        <button class="hotel-card-book-now-button">Book Now</button>
+      </div>
+    </div>
+  {% endfor %}
+</div>
 
-<div class="hotel-card">
+{% if hotel_data.meta.count == 0 %}
+  <p>No hotels found in the area.</p>
+{% endif %}
+<!--<div class="hotel-card">
   <div class="hotel-card-image"></div>
   <div class="hotel-card-details">
     <h3 class="hotel-card-name">Sonesta Select San Jose Airport</h3>
@@ -10,27 +28,7 @@
     <p class="hotel-card-price">$122</p>
     <button class="hotel-card-book-now-button">Book Now</button>
   </div>
-</div>
-
-<div class="hotel-card">
-  <div class="hotel-card-image"></div>
-  <div class="hotel-card-details">
-    <h3 class="hotel-card-name">Holiday Inn San Jose - Silicon Valley, an IHG Hotel</h3>
-    <p class="hotel-card-location">San Jose, CA</p>
-    <p class="hotel-card-price">$141</p>
-    <button class="hotel-card-book-now-button">Book Now</button>
-  </div>
-</div>
-
-<div class="hotel-card">
-  <div class="hotel-card-image"></div>
-  <div class="hotel-card-details">
-    <h3 class="hotel-card-name">DoubleTree by Hilton San Jose</h3>
-    <p class="hotel-card-location">San Jose, CA</p>
-    <p class="hotel-card-price">$165</p>
-    <button class="hotel-card-book-now-button">Book Now</button>
-  </div>
-</div>
+</div>-->
 <!--<div class="hotel-grid">
     {% for hotel in hotels %}
         <div class="hotel-card">
@@ -43,8 +41,8 @@
     {% endfor %}
 </div>-->
 
-        <!-- Footer Section Begin -->
-        <footer class="footer-section">
+<!-- Footer Section Begin -->
+<footer class="footer-section">
             <div class="container">
                 <div class="footer-text">
                     <div class="row">
@@ -107,7 +105,7 @@
                     </div>
                 </div>
             </div>
-        </footer>
+</footer>
 
 {% endblock %}
 

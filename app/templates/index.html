@@ -14,8 +14,7 @@
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Booking Your Hotel</h3>
-                        <!--<form action="/search" method="POST">-->
-                        <form action="/hotels" method="GET">
+                        <form action="/hotel-search" method="GET">
                             <!-- City search -->
                             <div class="city-option">
                                 <label for="cityCode">Enter a city code:</label>
@@ -46,7 +45,6 @@
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Check Availability</button>
-                            <!--<a href="{{ url_for('search') }}" class="primary-btn search-btn">Check Availability</a>-->
                         </form>
                     </div>
                 </div>
