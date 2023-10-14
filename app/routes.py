@@ -167,8 +167,27 @@ def search():
         print(f"Error fetching data from Amadeus API: {e}")
         return jsonify([])  # Return an empty list in case of an error
 
-@spartan_app.route('/hotels/<cityCode>/')
-def hotel_search(cityCode):
+# rooms path
+
+# about us path
+@spartan_app.route('/aboutUs')
+def aboutUs():
+    return render_template('/about-us.html')
+
+# profile path
+
+# manage reservations path
+@spartan_app.route('/reservations')
+def reservations():
+    return render_template('/reservations.html')
+
+# hotel-search path
+@spartan_app.route('/hotel-search')
+def hotel_searchs():
+#    return render_template('/hotel-search.html')
+# Get the value of the "cityCode" query parameter from the request
+    cityCode = request.args.get('cityCode')
+
     # Construct the Amadeus API URL for hotel search based on the city and country
     amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode={cityCode}&radius=15&radiusUnit=MILE&hotelSource=ALL"
 
@@ -184,38 +203,22 @@ def hotel_search(cityCode):
         if response.status_code == 200:
             # Extract and process hotel data from the response
             hotel_data = response.json()
-
+            
             if isinstance(hotel_data, (dict, list)):
-                return jsonify(hotel_data)
+                return render_template('hotel-search.html', hotel_data=hotel_data)
             else:
                 return "Invalid hotel data format"
-   
-            # # Render the hotel search template with the hotel data
-            # return render_template('hotel_search.html', hotels=hotel_data)
         else:
             response_json = response.json()  # Parse the JSON response
-            # return response_json
             if "errors" in response_json and isinstance(response_json["errors"], list):
                 error_list = response_json["errors"]
-
-            if error_list:
-                first_error = error_list[0]  # Assuming the first error message is what you want
-                error_title = first_error.get("title", "Unknown Error")
-                print(error_title)  # Print the "title" property
-                if (error_title == 'NOTHING FOUND FOR REQUESTED CITY'):
-                    return "There are no hotels in the city radius"
-                else:
-                    return "Some other error occurred"
+                if error_list:
+                    first_error = error_list[0]  # Assuming the first error message is what you want
+                    error_title = first_error.get("title", "Unknown Error")
+                    if error_title == 'NOTHING FOUND FOR REQUESTED CITY':
+                        return "There are no hotels in the city radius"
+                    else:
+                        return "Some other error occurred"
     except Exception as e:
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
-
-
-# rooms path
-
-# about us path
-@spartan_app.route('/aboutUs')
-def aboutUs():
-    return render_template('/about-us.html')
-
-# profile path

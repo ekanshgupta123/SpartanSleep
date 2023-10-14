@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="hero-text">
-                        <h1>Spartan Sleep</h1>
+                        <h1>SpartanSleep</h1>
                         <p>Your online destination to book hotel rooms suited for your Spartan needs.</p>
                         <a href="#" class="primary-btn">Discover Now</a>
                     </div>
@@ -14,7 +14,12 @@
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Booking Your Hotel</h3>
-                        <form action="#">
+                        <form action="/hotel-search" method="GET">
+                            <!-- City search -->
+                            <div class="city-option">
+                                <label for="cityCode">Enter a city code:</label>
+                                <input type="text" class="city-code" id="search-input" name="cityCode" placeholder="Enter a city code">
+                            </div>
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
                                 <input type="text" class="date-input" id="date-in">
@@ -39,7 +44,7 @@
                                     <option value="">2 Room</option>
                                 </select>
                             </div>
-                            <button type="submit">Check Availability</button>
+                            <button type="submit" class="btn btn-primary">Check Availability</button>
                         </form>
                     </div>
                 </div>

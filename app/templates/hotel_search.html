@@ -1,5 +1,0 @@
-{% extends "base.html" %}
-{% block mycontent %}
-    <h1>Raw Hotel Data for {{ cityCode }}</h1>
-    {{ hotel_data | tojson(indent=2) }}
-{% endblock %}

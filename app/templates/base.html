@@ -161,7 +161,7 @@
                                         {% else %}
                                         <li><a href="{{url_for('homePage')}}">Welcome back {{current_user.firstName}} !</a>
                                             <ul class="dropdown">
-                                                <li><a href="app/templates/reservations.html">Manage Reservations</a></li>
+                                                <li><a href="{{url_for('reservations')}}">Manage Reservations</a></li>
                                                 <li><a href="{{url_for('logout')}}">Log out</a></li>
                                                 <li><a href="/delete/{{current_user.id}}">Delete Account</a></li>
                                             </ul>

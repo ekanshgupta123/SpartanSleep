@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+
+    <!-- Welcome Card -->
+    <div class="welcome-card">
+                <h1>Hi, {{current_user.firstName}}!</h1>
+    </div>
+<!-- Reservation Section Begin -->
+<!--<div class="reservation-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+         Add white space to the left of the first column 
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 1</h5>
+                <p class="card-text">This is the first card in the first middle column.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 2</h5>
+                <p class="card-text">This is the second card in the first middle column.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 3</h5>
+                <p class="card-text">This is the first card in the second middle column.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 4</h5>
+                <p class="card-text">This is the second card in the second middle column.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+         Add white space to the right of the fourth column
+      </div>
+    </div>
+  </div>
+</div>-->
+<div class="reservations-container">
+  <h1>Your Upcoming Bookings</h1>
+  <div id="booking-cards">
+    
+  </div>
+  <!-- No Booking Card -->
+  <div class="no-booking-card">
+      <p>Looks like you have no upcoming bookings - Let's go fix that!</p>
+      <a href="/" class="btn btn-primary">Book now!</a>
+  </div>
+
+  <!-- Booking Card 
+  example: OrderedMap { "data": OrderedMap { 
+    "offerId": "NRPQNQBOJM", 
+    "guests": List [ OrderedMap { 
+    "name": OrderedMap { "title": "MR", "firstName": "BOB", "lastName": "SMITH" }, 
+    "contact": OrderedMap { 
+      "phone": "+33679278416", 
+      "email": "bob.smith@email.com" } } ], 
+      "payments": List [ OrderedMap { 
+        "method": "creditCard", "card": OrderedMap { 
+          "vendorCode": "VI", 
+          "cardNumber": "0000000000000000", "expiryDate": "2026-01" } } ] } }
+  -->
+  <div class="booking-card">
+    <div class="booking-card-header">
+      <div class="booking-card-header-left">
+        <h3>Booking #1</h3>
+        <p>Hotel Name</p>
+      </div>
+      <div class="booking-card-header-right">
+        <p>Check In: 12/12/2020</p>
+        <p>Check Out: 12/14/2020</p>
+      </div>
+    </div>
+    <div class="booking-card-body">
+      <div class="booking-card-body-left">
+        <img src="https://via.placeholder.com/150" alt="Hotel Image">
+      </div>
+      <div class="booking-card-body-right">
+        <h3>Room Name</h3>
+        <p>Room Description</p>
+        <p>Room Price</p>
+      </div>
+    </div>
+    <div class="booking-card-footer">
+      <button>Cancel Booking</button>
+    </div>
+</div>
+
+
+<script src="scripts.js"></script>
+                   
+    <!-- Footer Section Begin -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-text">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="ft-about">
+                            <div class="logo">
+                                <a href="#">
+                                    <img src="img/footer-logo.png" alt="">
+                                </a>
+                            </div>
+                            <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
+                            <div class="fa-social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-tripadvisor"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 offset-lg-1">
+                        <div class="ft-contact">
+                            <h6>Contact Us</h6>
+                            <ul>
+                                <li>(12) 345 67890</li>
+                                <li>info.colorlib@gmail.com</li>
+                                <li>856 Cordia Extension Apt. 356, Lake, United State</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 offset-lg-1">
+                        <div class="ft-newslatter">
+                            <h6>New latest</h6>
+                            <p>Get the latest updates and offers.</p>
+                            <form action="#" class="fn-form">
+                                <input type="text" placeholder="Email">
+                                <button type="submit"><i class="fa fa-send"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-option">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <ul>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Terms of use</a></li>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Environmental Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="co-text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search model end -->
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
+{% endblock %}
