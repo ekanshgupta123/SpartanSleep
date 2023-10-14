@@ -151,8 +151,11 @@ def search():
         print(f"Error fetching data from Amadeus API: {e}")
         return jsonify([])  # Return an empty list in case of an error
 
-@spartan_app.route('/hotels/<cityCode>/')
-def hotel_search(cityCode):
+@spartan_app.route('/hotels')
+def hotel_search():
+    # Get the value of the "cityCode" query parameter from the request
+    cityCode = request.args.get('cityCode')
+
     # Construct the Amadeus API URL for hotel search based on the city and country
     amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode={cityCode}&radius=15&radiusUnit=MILE&hotelSource=ALL"
 
