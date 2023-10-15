@@ -7,6 +7,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from datetime import timedelta
 import pycountry
 import requests
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #database initialization
 @spartan_app.before_request
@@ -30,9 +31,13 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user is None and not user.verify_password(form.password.data):
-            flash("Wrong password or email")
+        if user is None:
+            flash("Wrong email")
             return redirect(url_for('login'))
+        else:
+            if not check_password_hash(user.password, form.password.data):
+                flash("Wrong password")
+                return redirect(url_for('login'))
         login_user(user,form.remember_me.data)
         print(form.email.data, form.password.data)
         return redirect(url_for('homePage'))
@@ -103,12 +108,14 @@ def get_access_token():
 def signup():
     current_form = SignupForm()
     if current_form.validate_on_submit():
+        hashed_password=generate_password_hash(current_form.password.data)
         user = User(
             firstName=current_form.firstName.data,
             lastName=current_form.lastName.data,
             email=current_form.email.data,
-            password=current_form.password.data
+            password=hashed_password
         )
+
         db.session.add(user)
         db.session.commit()
         flash('Account creation successful!')
