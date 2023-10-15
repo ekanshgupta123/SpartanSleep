@@ -220,7 +220,7 @@ def hotel_search(cityCode):
 # about us path
 @spartan_app.route('/aboutUs')
 def aboutUs():
-    return render_template('/about-us.html')
+    return render_template('about-us.html')
 
 # profile path
 
