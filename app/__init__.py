@@ -5,7 +5,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from jinja2 import Environment
 import os.path
-
+from flask_bcrypt import Bcrypt
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,6 +20,7 @@ spartan_app.config.update(
 )
 
 db = SQLAlchemy(spartan_app)
+bcrypt=Bcrypt(spartan_app)
 migrate = Migrate(spartan_app,db)
 
 
