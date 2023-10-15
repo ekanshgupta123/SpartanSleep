@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block mycontent %}
-<h1>There are currently {{ hotel_data.meta.count }} hotels available
-     in the {{ hotel_data.meta.cityCode }} area</h1>
 <div class="hotel-cards">
   {% for hotel in hotel_data.data %}
     <div class="hotel-card">
@@ -17,9 +15,6 @@
   {% endfor %}
 </div>
 
-{% if hotel_data.meta.count == 0 %}
-  <p>No hotels found in the area.</p>
-{% endif %}
 <!--<div class="hotel-card">
   <div class="hotel-card-image"></div>
   <div class="hotel-card-details">
