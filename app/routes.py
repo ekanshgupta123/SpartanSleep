@@ -247,7 +247,7 @@ def hotel_searchs():
     try:
         # Send a GET request to the Amadeus API
         response = requests.get(amadeus_api_url, headers=headers)
-
+        print(response.json())
         if response.status_code == 200:
             # Extract and process hotel data from the response
             hotel_data = response.json()
@@ -270,3 +270,61 @@ def hotel_searchs():
     except Exception as e:
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
+
+
+@spartan_app.route('/book')
+def hotel_book():
+    url = "https://test.api.amadeus.com/v1"
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+    obj = {
+    "data": {
+        "offerId": "NRPQNQBOJM",
+        "guests": [
+        {
+            "name": {
+            "title": "MR",
+            "firstName": "BOB",
+            "lastName": "SMITH"
+            },
+            "contact": {
+            "phone": "+33679278416",
+            "email": "bob.smith@email.com"
+            }
+        }
+        ],
+        "payments": [
+        {
+            "method": "creditCard",
+            "card": {
+            "vendorCode": "VI",
+            "cardNumber": "0000000000000000",
+            "expiryDate": "2026-01"
+            }
+        }
+        ]
+    }
+    }
+    try:
+        response = requests.post(url, headers=headers, json=obj)
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching hotel data from Amadeus API: {e}")
+        return "An error occurred"
+
+
+@spartan_app.route('/checkout/pay-now/<string:hotel_id>')
+def checkoutPayNow(hotel_id):
+    # Logic for Pay Now checkout
+    return render_template('checkout-pay-now.html', hotel_id=hotel_id)
+
+@spartan_app.route('/checkout/pay-later/<string:hotel_id>')
+def checkoutPayLater(hotel_id):
+    # Logic for Pay Later checkout
+    return render_template('checkout-pay-later.html', hotel_id=hotel_id)
+
+@spartan_app.route('/confirm-booking')
+def confirmBooking():
+    # Logic for Pay Later checkout
+    return render_template('confirm-booking.html')
