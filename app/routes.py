@@ -2,11 +2,14 @@ from app import spartan_app, db
 from flask import render_template, redirect, flash, request, url_for, session, jsonify
 from app.forms import SignupForm, SearchForm
 from app.forms import LoginForm
+from app.forms import PaymentForm
 from app.models import User
+from app.models import Payment
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import timedelta
 import pycountry
 import requests
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #database initialization
 @spartan_app.before_request
@@ -31,9 +34,13 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user is None and not user.verify_password(form.password.data):
-            flash("Wrong password or email")
+        if user is None:
+            flash("Wrong email")
             return redirect(url_for('login'))
+        else:
+            if not check_password_hash(user.password, form.password.data):
+                flash("Wrong password")
+                return redirect(url_for('login'))
         login_user(user,form.remember_me.data)
         print(form.email.data, form.password.data)
         return redirect(url_for('homePage'))
@@ -46,6 +53,22 @@ def logout():
     logout_user()
     return redirect('/login')
 
+@spartan_app.route('/delete/<int:id>')
+def delete(id):
+    # attempt to get the user by provided id, and if it doesn't exist -> return 404 error
+    user = User.query.get_or_404(id)
+
+    try:
+        # Delete the user from the database:
+        db.session.delete(user)
+        db.session.commit()
+
+        # Redirect the user to the home page:
+        return redirect(url_for('home'))
+    except:
+        # If there was 1 error while deleting the user's account, display 1 error message:
+        return 'There was something wrong when deleting your account!'
+    
 #getting request token
 def get_access_token():
     global access_token
@@ -88,12 +111,14 @@ def get_access_token():
 def signup():
     current_form = SignupForm()
     if current_form.validate_on_submit():
+        hashed_password=generate_password_hash(current_form.password.data)
         user = User(
             firstName=current_form.firstName.data,
             lastName=current_form.lastName.data,
             email=current_form.email.data,
-            password=current_form.password.data
+            password=hashed_password
         )
+
         db.session.add(user)
         db.session.commit()
         flash('Account creation successful!')
@@ -152,12 +177,53 @@ def search():
         print(f"Error fetching data from Amadeus API: {e}")
         return jsonify([])  # Return an empty list in case of an error
 
-# rooms path
+@spartan_app.route('/hotels/<cityCode>/')
+def hotel_search(cityCode):
+    # Construct the Amadeus API URL for hotel search based on the city and country
+    amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode={cityCode}&radius=15&radiusUnit=MILE&hotelSource=ALL"
+
+    # Set up headers with the API key
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+
+    try:
+        # Send a GET request to the Amadeus API
+        response = requests.get(amadeus_api_url, headers=headers)
+
+        if response.status_code == 200:
+            # Extract and process hotel data from the response
+            hotel_data = response.json()
+
+            if isinstance(hotel_data, (dict, list)):
+                return render_template('hotel-search.html', hotel_data=hotel_data)
+            else:
+                return "Invalid hotel data format"
+   
+            # # Render the hotel search template with the hotel data
+            # return render_template('hotel_search.html', hotels=hotel_data)
+        else:
+            response_json = response.json()  # Parse the JSON response
+            # return response_json
+            if "errors" in response_json and isinstance(response_json["errors"], list):
+                error_list = response_json["errors"]
+
+            if error_list:
+                first_error = error_list[0]  # Assuming the first error message is what you want
+                error_title = first_error.get("title", "Unknown Error")
+                print(error_title)  # Print the "title" property
+                if (error_title == 'NOTHING FOUND FOR REQUESTED CITY'):
+                    return "There are no hotels in the city radius"
+                else:
+                    return "Some other error occurred"
+    except Exception as e:
+        print(f"Error fetching hotel data from Amadeus API: {e}")
+        return "An error occurred"
 
 # about us path
 @spartan_app.route('/aboutUs')
 def aboutUs():
-    return render_template('/about-us.html')
+    return render_template('about-us.html')
 
 # profile path
 
@@ -184,7 +250,7 @@ def hotel_searchs():
     try:
         # Send a GET request to the Amadeus API
         response = requests.get(amadeus_api_url, headers=headers)
-
+        print(response.json())
         if response.status_code == 200:
             # Extract and process hotel data from the response
             hotel_data = response.json()
@@ -207,3 +273,75 @@ def hotel_searchs():
     except Exception as e:
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
+
+
+@spartan_app.route('/book')
+def hotel_book():
+    url = "https://test.api.amadeus.com/v1"
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+    obj = {
+    "data": {
+        "offerId": "NRPQNQBOJM",
+        "guests": [
+        {
+            "name": {
+            "title": "MR",
+            "firstName": "BOB",
+            "lastName": "SMITH"
+            },
+            "contact": {
+            "phone": "+33679278416",
+            "email": "bob.smith@email.com"
+            }
+        }
+        ],
+        "payments": [
+        {
+            "method": "creditCard",
+            "card": {
+            "vendorCode": "VI",
+            "cardNumber": "0000000000000000",
+            "expiryDate": "2026-01"
+            }
+        }
+        ]
+    }
+    }
+    try:
+        response = requests.post(url, headers=headers, json=obj)
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching hotel data from Amadeus API: {e}")
+        return "An error occurred"
+
+
+@spartan_app.route('/checkout/pay-now/<string:hotel_id>', methods=['GET', 'POST'])
+def checkoutPayNow(hotel_id):
+    # Logic for Pay Now checkout
+    form = PaymentForm()
+    if form.validate_on_submit():
+        payment = Payment(
+            name=form.name.data,
+            email=form.email.data,
+            phone=form.phone.data,
+            card_number=form.card_number.data,
+            expiry_date=form.expiry_date.data,
+            cvv=form.cvv.data,
+        )
+        db.session.add(payment)
+        db.session.commit()
+        flash('Payment Accepted!')
+        return redirect(url_for('confirmBooking'))
+    return render_template('checkout-pay-now.html', hotel_id=hotel_id, form=PaymentForm())
+
+@spartan_app.route('/checkout/pay-later/<string:hotel_id>')
+def checkoutPayLater(hotel_id):
+    # Logic for Pay Later checkout
+    return render_template('checkout-pay-later.html', hotel_id=hotel_id)
+
+@spartan_app.route('/confirm-booking')
+def confirmBooking():
+    # Logic for Pay Later checkout
+    return render_template('confirm-booking.html')

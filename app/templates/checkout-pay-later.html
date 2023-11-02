@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+<body>
+    <h1>Pay Later</h1>
+    <form action="/confirm-booking" method="get">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" required>
+        </div>
+        <button type="submit">Confirm Booking</button>
+    </form>
+</body>
+{% endblock %}
+
