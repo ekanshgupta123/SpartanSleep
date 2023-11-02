@@ -19,8 +19,8 @@ spartan_app.config.update(
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 )
 spartan_app.config['SQLALCHEMY_BINDS'] = {
-    'default': 'sqlite:///' + os.path.join(basedir, 'app.db'),
-    'payment_db': 'sqlite:///' + os.path.join(basedir, 'payment.db')
+    'default': 'sqlite:///' + os.path.join(basedir, 'app.db')#,
+    #'payment_db': 'sqlite:///' + os.path.join(basedir, 'payment.db')
 }
 
 db = SQLAlchemy(spartan_app)
