@@ -14,8 +14,9 @@ def before_request():
     session.permanent = True
     spartan_app.permanent_session_lifetime = timedelta(minutes=15) 
 
-@spartan_app.before_first_request
-def create_tables():
+#@spartan_app.before_first_request
+#def create_tables():
+with spartan_app.app_context():
     db.create_all()
 
 
