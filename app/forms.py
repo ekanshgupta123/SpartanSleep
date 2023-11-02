@@ -36,4 +36,11 @@ class SearchForm(FlaskForm):
     #creating fields for searching
     searchInput = StringField('Search For User', validators = [DataRequired()])
 
-
+class PaymentForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=255)])
+    email = StringField('Email', validators=[DataRequired(), Length(max=255)])
+    phone = StringField('Phone Number', validators=[DataRequired(), Length(max=20)])
+    card_number = StringField('Card Number', validators=[DataRequired(), Length(max=16)])
+    expiry_date = StringField('Expiry Date', validators=[DataRequired(), Length(max=10)])
+    cvv = StringField('CVV', validators=[DataRequired(), Length(max=4)])
+    submit = SubmitField('Submit Payment')

@@ -15,9 +15,13 @@ spartan_app.static_folder = 'static'
 
 spartan_app.config.update(
     SECRET_KEY='this-is-a-secret',
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db'),   #sets location of database
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db'),#sets location of database
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 )
+spartan_app.config['SQLALCHEMY_BINDS'] = {
+    'default': 'sqlite:///' + os.path.join(basedir, 'app.db'),
+    'payment_db': 'sqlite:///' + os.path.join(basedir, 'payment.db')
+}
 
 db = SQLAlchemy(spartan_app)
 bcrypt=Bcrypt(spartan_app)
