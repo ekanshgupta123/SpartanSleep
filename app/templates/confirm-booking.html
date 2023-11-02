@@ -1,9 +1,22 @@
 {% extends "base.html" %}
 
 {% block mycontent %}
-<body>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <body>
     <div>
         <h1>Booking Successful</h1>
+    </div>
+    <div class="flash-message">
     </div>
 </body>
 {% endblock %}

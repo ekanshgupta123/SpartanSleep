@@ -2,7 +2,9 @@ from app import spartan_app, db
 from flask import render_template, redirect, flash, request, url_for, session, jsonify
 from app.forms import SignupForm, SearchForm
 from app.forms import LoginForm
+from app.forms import PaymentForm
 from app.models import User
+from app.models import Payment
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import timedelta
 import pycountry
@@ -314,10 +316,24 @@ def hotel_book():
         return "An error occurred"
 
 
-@spartan_app.route('/checkout/pay-now/<string:hotel_id>')
+@spartan_app.route('/checkout/pay-now/<string:hotel_id>', methods=['GET', 'POST'])
 def checkoutPayNow(hotel_id):
     # Logic for Pay Now checkout
-    return render_template('checkout-pay-now.html', hotel_id=hotel_id)
+    form = PaymentForm()
+    if form.validate_on_submit():
+        payment = Payment(
+            name=form.name.data,
+            email=form.email.data,
+            phone=form.phone.data,
+            card_number=form.card_number.data,
+            expiry_date=form.expiry_date.data,
+            cvv=form.cvv.data,
+        )
+        db.session.add(payment)
+        db.session.commit()
+        flash('Payment Accepted!')
+        return redirect(url_for('confirmBooking'))
+    return render_template('checkout-pay-now.html', hotel_id=hotel_id, form=PaymentForm())
 
 @spartan_app.route('/checkout/pay-later/<string:hotel_id>')
 def checkoutPayLater(hotel_id):
