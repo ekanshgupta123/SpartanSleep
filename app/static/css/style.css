@@ -605,6 +605,38 @@ ul, ol {
 .booking-form form .select-option {
 	margin-bottom: 15px;
 }
+.my-label {
+    /* Add your styles here */
+	font-size: 14px;
+	color: #707079;
+	display: block;
+	margin-bottom: 10px;
+}
+.booking-form form .select-option .guest-wrapper .guestInputBox {
+	width: 186px;
+	height: 46px;
+	border-color: transparent;
+}
+
+.booking-form form .select-option .guest-button {
+	color: #dfa974;
+	background-color: white;
+	border-color: white;
+}
+
+.booking-form form .select-option .guest-wrapper {
+	width: fit-content;
+	border-radius: 2px;
+	border: 1px solid #ebebeb;
+	height: 50px;
+	line-height: 50px;
+	outline: none;
+	padding-left: 4px;
+	width: 100%;
+	float: none;
+	border-color: #6c757d;
+}
+
 .booking-form form .select-option label {
 	font-size: 14px;
 	color: #707079;
@@ -640,6 +672,12 @@ ul, ol {
 	margin-top: 0;
 	width: 100%;
 }
+/*----------------
+New guest select-option
+------------------*/
+
+
+
 .booking-form .primary-btn.search-btn {
 	display: block;
 	font-size: 14px;
@@ -3053,6 +3091,19 @@ h1 {
 /* ---------------------
  Hotel Search Page
 -----------------------*/
+.search-container {
+	display: flex;
+}
+.location-box {
+	flex-grow: 1;
+}
+.check-in-out-box {
+	flex-grow: 1;
+}
+.guests-box {
+	flex-grow: 1;
+}
+
 .hotel-card {
 	display: flex;
   flex-direction: row;

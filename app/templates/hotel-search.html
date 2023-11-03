@@ -1,6 +1,32 @@
 {% extends "base.html" %}
-
+  
 {% block mycontent %}
+<div class="container">
+    <h1>There are currently {{ hotel_data.meta.count }} hotels available
+        in the {{ hotel_data.meta.cityCode }} area</h1>
+    <p>Check In: {{ checkIn }}</p>
+    <p>Check Out: {{ checkOut }}</p>
+    <p>Guests: {{ guests }}</p>
+    <p>Rooms: {{ rooms }}</p>
+    <div class="search-container">
+        <div class="location-box">
+            <label>Location</label>
+            <input type="text" name="location" placeholder="Enter a location">
+          </div>
+          
+          <div class="check-in-out-box">
+            <label>Check in / Check out</label>
+            <input type="date" name="check_in" placeholder="Check in date">
+            <input type="date" name="check_out" placeholder="Check out date">
+          </div>
+          
+          <div class="guests-box">
+            <label>Guests</label>
+            <input type="number" name="guests" placeholder="Number of guests">
+          </div>
+    </div>
+</div>
+
 <div class="hotel-cards">
   {% for hotel in hotel_data.data %}
     <div class="hotel-card">

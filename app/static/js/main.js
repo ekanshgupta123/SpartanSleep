@@ -106,4 +106,57 @@
 	--------------------*/
     $("select").niceSelect();
 
+    /*------------------
+        Plus Minus Button for Guest selection (index.html)
+    ------------------*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const guestInput = document.getElementById('guest');
+        const guestIncreaseButton = document.getElementById('guest-increase');
+        const guestDecreaseButton = document.getElementById('guest-decrease');
+        const form = document.querySelector('form');
+    
+        // Function to update the guest count and button states
+        function updateGuestCount() {
+            const guestCount = parseInt(guestInput.value);
+    
+            // Disable the minus button when the guest count is 1
+            guestDecreaseButton.disabled = guestCount === 1;
+    
+            // You can use the guestCount value as needed in your code
+        }
+    
+        // Initialize guest count
+        updateGuestCount();
+    
+        // Increase button click
+        guestIncreaseButton.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent form submission
+            guestInput.value = parseInt(guestInput.value) + 1;
+            updateGuestCount();
+        });
+    
+        // Decrease button click
+        guestDecreaseButton.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent form submission
+            const guestCount = parseInt(guestInput.value);
+            if (guestCount > 1) {
+                guestInput.value = guestCount - 1;
+                updateGuestCount();
+            }
+        });
+    
+        // Form submission
+        form.addEventListener('submit', function (e) {
+            // Prevent the default form submission
+            e.preventDefault();
+    
+            // Handle form submission here, e.g., update URL or make an AJAX request
+            // You can also manually trigger the form submission if needed
+            // form.submit();
+        });
+    
+        // Input field change
+        guestInput.addEventListener('change', updateGuestCount);
+    });
+
 })(jQuery);

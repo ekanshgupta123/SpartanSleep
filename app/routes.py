@@ -256,7 +256,11 @@ def hotel_searchs():
             hotel_data = response.json()
             
             if isinstance(hotel_data, (dict, list)):
-                return render_template('hotel-search.html', hotel_data=hotel_data)
+                checkIn = request.args.get('date-in')
+                checkOut = request.args.get('date-out')
+                guests = request.args.get('guest')
+                rooms = request.args.get('room')
+                return render_template('hotel-search.html', hotel_data=hotel_data, authorized=current_user.is_authenticated, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms)
             else:
                 return "Invalid hotel data format"
         else:
