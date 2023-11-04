@@ -6,93 +6,14 @@
     <div class="hotel-card">
       <div class="hotel-card-image"></div>
       <div class="hotel-card-details">
-        <h3 class="hotel-card-name">{{ hotel.name }}</h3>
+        <a href = "{{url_for('hotel_view', hotel_id=hotel.hotelId)}}" class="hotel-card-name">{{ hotel.name }}</a>
         <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
         <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
-        <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel.hotelId }}">Book Now</button>
-        
       </div>
     </div>
   {% endfor %}
-    <div class="book-now-modal">
-        <div class="modal-content">
-            <span id="closeModalBtn" class="close">&times;</span>
-            <h5>Your payment options:</h5>
-            <div class="modal-options">
-                <div>
-                    <h6>Pay Now</h6>
-                    <ul>
-                        <li>We will process your payment in your local currency</li>
-                        <li>More ways to pay: use Debit/Credit card</li>
-                    </ul>
-                    <button id="payNowBtn" data-hotel-id="" onclick="goToCheckout('pay-now')">Pay Now</button>
-                </div>
-                <div>
-                    <h6>Pay when you stay</h6>
-                    <ul>
-                        <li>You will not be charged until your stay</li>
-                        <li> Pay the property directly in their preferred currency</li>
-                    </ul>
-                    <button id="payLaterBtn" data-hotel-id="" onclick="goToCheckout('pay-later')">Pay Later</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.querySelector('.book-now-modal');
-    var closeModalBtn = document.getElementById('closeModalBtn');
-
-    // Function to open the modal
-    function openModal() {
-        modal.style.display = 'block';
-    }
-
-    // Function to close the modal
-    function closeModal() {
-        modal.style.display = 'none';
-    }
-
-    // Attach click event to all 'Book Now' buttons
-    var bookNowButtons = document.querySelectorAll('.hotel-card-book-now-button');
-    // Assuming each hotel card has a data attribute 'data-hotel-id'
-    bookNowButtons.forEach(function(button) {
-    button.addEventListener('click', function() {
-        var hotelId = this.dataset.hotelId;
-        var payNowBtn = document.getElementById('payNowBtn');
-        var payLaterBtn = document.getElementById('payLaterBtn');
-        payNowBtn.dataset.hotelId = hotelId;
-        payLaterBtn.dataset.hotelId = hotelId;
-        openModal();
-    });
-});
-
-
-    // Close the modal when the close button is clicked
-    closeModalBtn.addEventListener('click', closeModal);
-
-    // Close the modal if the user clicks outside of it
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeModal();
-        }
-    });
-});
-
-function goToCheckout(checkoutType) {
-    var hotelId = document.getElementById('payNowBtn').dataset.hotelId; // Both buttons have the same hotel ID
-    if (hotelId) {
-        var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId;
-        window.location.href = checkoutUrl;
-    } else {
-        console.error('Hotel ID is not set');
-    }
-}
-
-
-</script>
 
 <!--<div class="hotel-card">
   <div class="hotel-card-image"></div>

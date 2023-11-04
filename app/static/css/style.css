@@ -3052,6 +3052,7 @@ h1 {
     padding: 10px;
     text-align: center;
     cursor: pointer;
+	margin-left: 100px;
   }
 
   /* Base styles for the grid container and hotel cards */
