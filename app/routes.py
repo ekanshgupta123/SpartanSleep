@@ -176,6 +176,45 @@ def search():
         print(f"Error fetching data from Amadeus API: {e}")
         return jsonify([])  # Return an empty list in case of an error
 
+@spartan_app.route('/hotel-view/<string:hotel_id>', methods = ['GET', 'POST'])
+def hotel_view(hotel_id):
+    amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds={hotel_id}"
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+
+    try:
+        # Send a GET request to the Amadeus API
+        response = requests.get(amadeus_api_url, headers=headers)
+
+        if response.status_code == 200:
+            # Extract and process hotel data from the response
+            hotel_data = response.json()
+
+            if isinstance(hotel_data, (dict, list)):
+                hotel_data = hotel_data["data"][0]
+                print("Hotel Name:", hotel_data['name'])
+                return render_template('hotel-view.html', hotel_data=hotel_data)
+            else:
+                return "Invalid hotel data format"
+        else:
+            response_json = response.json()  # Parse the JSON response
+            # return response_json
+            if "errors" in response_json and isinstance(response_json["errors"], list):
+                error_list = response_json["errors"]
+
+            if error_list:
+                first_error = error_list[0]  # Assuming the first error message is what you want
+                error_title = first_error.get("title", "Unknown Error")
+                print(error_title)  # Print the "title" property
+                if (error_title == 'NOTHING FOUND FOR REQUESTED CITY'):
+                    return "There are no hotels in the city radius"
+                else:
+                    return "Some other error occurred"
+    except Exception as e:
+        print(f"Error fetching hotel data from Amadeus API: {e}")
+        return "An error occurred"
+
 @spartan_app.route('/hotels/<cityCode>/')
 def hotel_search(cityCode):
     # Construct the Amadeus API URL for hotel search based on the city and country
