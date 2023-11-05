@@ -269,7 +269,7 @@ def aboutUs():
 @spartan_app.route('/reservations')
 def reservations():
     user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price).filter_by(user_id=current_user.id).all()
-    # print(len(user_bookings))
+    print(len(user_bookings))
     return render_template('/reservations.html', user_bookings=user_bookings)
 
 # hotel-search path
