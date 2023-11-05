@@ -1,0 +1,716 @@
+/* screen - reservation */
+
+.reservation {
+  background-color: var(--white);
+  height: 100vh;
+  margin: 0px;
+  min-height: 1080px;
+  min-width: 1600px;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.reservation .pricing-2qMuan {
+  background-color: transparent;
+  height: 27px;
+  left: 783px;
+  position: absolute;
+  top: 572px;
+  width: 165px;
+}
+
+.reservation .x228-fJQx2o {
+  background-color: transparent;
+  color: var(--black);
+  font-family: var(--font-family-avenir-heavy);
+  font-size: var(--font-size-l);
+  font-weight: 800;
+  height: 27px;
+  left: 117px;
+  letter-spacing: 0.00px;
+  line-height: 27px;
+  position: absolute;
+  text-align: left;
+  top: 0px;
+  white-space: nowrap;
+  width: 50px;
+}
+
+.reservation .starts-from-fJQx2o {
+  background-color: transparent;
+  color: var(--black);
+  font-family: var(--font-family-avenir-medium);
+  font-size: var(--font-size-l);
+  font-weight: 500;
+  height: 27px;
+  left: 0px;
+  letter-spacing: 0.00px;
+  line-height: 27px;
+  position: absolute;
+  text-align: left;
+  top: 0px;
+  white-space: nowrap;
+  width: 114px;
+}
+
+.reservation .booking-button-2qMuan {
+  background-color: transparent;
+  height: 56px;
+  left: 98px;
+  position: absolute;
+  top: 984px;
+  width: 200px;
+}
+
+.reservation .booking-zbNeAW {
+  background-color: #d74850;
+  border-radius: 15px;
+  height: 56px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 200px;
+}
+
+.reservation .book-now-zbNeAW {
+  background-color: transparent;
+  color: var(--white);
+  font-family: var(--font-family-avenir-heavy);
+  font-size: var(--font-size-l);
+  font-weight: 800;
+  height: 27px;
+  left: 51px;
+  letter-spacing: 0.00px;
+  line-height: 27px;
+  position: absolute;
+  text-align: left;
+  top: 15px;
+  white-space: nowrap;
+  width: 101px;
+}
+
+.reservation .hotel-name-2qMuan {
+  background-color: transparent;
+  height: 65px;
+  left: 98px;
+  position: absolute;
+  top: 572px;
+  width: 147px;
+}
+
+.reservation .san-jose-FEhXH1 {
+  background-color: transparent;
+  color: #afafaf;
+  font-family: var(--font-family-avenir-medium);
+  font-size: var(--font-size-l);
+  font-weight: 500;
+  height: 27px;
+  left: 0px;
+  letter-spacing: 0.00px;
+  line-height: 27px;
+  position: absolute;
+  text-align: left;
+  top: 38px;
+  white-space: nowrap;
+  width: 82px;
+}
+
+.reservation .title-FEhXH1 {
+  background-color: transparent;
+  color: var(--black);
+  font-family: var(--font-family-avenir-heavy);
+  font-size: var(--font-size-xxl);
+  font-weight: 800;
+  height: 38px;
+  left: 0px;
+  letter-spacing: 0.00px;
+  line-height: 38px;
+  position: absolute;
+  text-align: left;
+  top: 0px;
+  white-space: nowrap;
+  width: 149px;
+}
+
+.reservation .number-of-rooms-2qMuan {
+  background-color: transparent;
+  height: 45px;
+  left: 98px;
+  position: absolute;
+  top: 677px;
+  width: 154px;
+}
+
+.reservation .x2-bedroom-0r0Ge1 {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 60px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 10px;
+  white-space: nowrap;
+  width: 96px;
+}
+
+.reservation .group-2-0r0Ge1 {
+  background-color: transparent;
+  height: 45px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 45px;
+}
+
+.reservation .view-lKQbqU {
+  height: 16px;
+  left: 15px;
+  top: 15px;
+  width: 16px;
+}
+
+.reservation .shape-ocLfQP {
+  height: 16px;
+  width: 16px;
+}
+
+.reservation .number-of-bathrooms-2qMuan {
+  background-color: transparent;
+  height: 45px;
+  left: 318px;
+  position: absolute;
+  top: 677px;
+  width: 159px;
+}
+
+.reservation .x2-bathroom-t2pGgE {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 60px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 10px;
+  white-space: nowrap;
+  width: 101px;
+}
+
+.reservation .group-3-t2pGgE {
+  background-color: transparent;
+  height: 45px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 45px;
+}
+
+.reservation .view-pjPGy5 {
+  height: 19px;
+  left: 15px;
+  top: 14px;
+  width: 14px;
+}
+
+.reservation .shape-XZRxSO {
+  height: 19px;
+  width: 14px;
+}
+
+.reservation .area-2qMuan {
+  background-color: transparent;
+  height: 45px;
+  left: 538px;
+  position: absolute;
+  top: 677px;
+  width: 129px;
+}
+
+.reservation .x1250-ft-6TipRZ {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 60px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 10px;
+  white-space: nowrap;
+  width: 71px;
+}
+
+.reservation .group-4-6TipRZ {
+  background-color: transparent;
+  height: 45px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 45px;
+}
+
+.reservation .oval-copy-2-tW9DmP {
+  background-color: var(--pot-pourri);
+  border-radius: 45px;
+  height: 45px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 45px;
+}
+
+.reservation .view-tW9DmP {
+  height: 18px;
+  left: 14px;
+  top: 14px;
+  width: 17px;
+}
+
+.reservation .shape-HUShFb {
+  height: 18px;
+  width: 17px;
+}
+
+.reservation .security-2qMuan {
+  background-color: transparent;
+  height: 45px;
+  left: 758px;
+  position: absolute;
+  top: 677px;
+  width: 188px;
+}
+
+.reservation .highly-secured-Gnn1vF {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 60px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 10px;
+  white-space: nowrap;
+  width: 130px;
+}
+
+.reservation .group-5-Gnn1vF {
+  background-color: transparent;
+  height: 45px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 45px;
+}
+
+.reservation .oval-copy-3-C5IOHv {
+  background-color: var(--pot-pourri);
+  border-radius: 45px;
+  height: 45px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 45px;
+}
+
+.reservation .view-C5IOHv {
+  height: 17px;
+  left: 15px;
+  top: 15px;
+  width: 14px;
+}
+
+.reservation .shape-u1G9uz {
+  height: 17px;
+  width: 14px;
+}
+
+.reservation .rectangle-2qMuan {
+  background-color: transparent;
+  border: 2px solid;
+  border-color: #da535c;
+  border-radius: 22px;
+  height: 44px;
+  left: 1350px;
+  position: absolute;
+  top: 27px;
+  width: 173px;
+}
+
+.reservation .review-box-2qMuan {
+  background-color: transparent;
+  height: 941px;
+  left: 1073px;
+  position: absolute;
+  top: 99px;
+  width: 450px;
+}
+
+.reservation .rectangle-Hipt0j {
+  background-color: #f4f4f6;
+  border-radius: 25px;
+  height: 941px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 450px;
+}
+
+.reservation .reviews-Hipt0j {
+  background-color: transparent;
+  color: var(--black);
+  font-family: var(--font-family-avenir-heavy);
+  font-size: var(--font-size-xxl);
+  font-weight: 800;
+  height: 38px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 38px;
+  position: absolute;
+  text-align: left;
+  top: 29px;
+  white-space: nowrap;
+  width: 109px;
+}
+
+.reservation .group-10-Hipt0j {
+  background-color: transparent;
+  height: 176px;
+  left: 20px;
+  position: absolute;
+  top: 113px;
+  width: 410px;
+}
+
+.reservation .rectangle-prGmwI {
+  background-color: var(--white);
+  border-radius: 20px;
+  height: 176px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 410px;
+}
+
+.reservation .travis-prGmwI {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 20px;
+  white-space: nowrap;
+  width: 50px;
+}
+
+.reservation .near-to-the-city-fr-prGmwI {
+  background-color: transparent;
+  font-weight: 500;
+  height: 16px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 16px;
+  position: absolute;
+  text-align: left;
+  top: 55px;
+  white-space: nowrap;
+  width: 313px;
+}
+
+.reservation .group-11-Hipt0j {
+  background-color: transparent;
+  height: 150px;
+  left: 20px;
+  position: absolute;
+  top: 309px;
+  width: 410px;
+}
+
+.reservation .rectangle-copy-hjoacg {
+  background-color: var(--white);
+  border-radius: 20px;
+  height: 150px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 410px;
+}
+
+.reservation .krishna-hjoacg {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 20px;
+  white-space: nowrap;
+  width: 65px;
+}
+
+.reservation .near-to-the-city-fr-copy-hjoacg {
+  background-color: transparent;
+  font-weight: 500;
+  height: 16px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 16px;
+  position: absolute;
+  text-align: left;
+  top: 55px;
+  white-space: nowrap;
+  width: 313px;
+}
+
+.reservation .group-12-Hipt0j {
+  background-color: transparent;
+  height: 220px;
+  left: 20px;
+  position: absolute;
+  top: 479px;
+  width: 410px;
+}
+
+.reservation .rectangle-copy-2-w9WsLt {
+  background-color: var(--white);
+  border-radius: 20px;
+  height: 220px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 410px;
+}
+
+.reservation .bianca-w9WsLt {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 20px;
+  white-space: nowrap;
+  width: 57px;
+}
+
+.reservation .near-to-the-city-fr-copy-2-w9WsLt {
+  background-color: transparent;
+  font-weight: 500;
+  height: 16px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 16px;
+  position: absolute;
+  text-align: left;
+  top: 55px;
+  white-space: nowrap;
+  width: 313px;
+}
+
+.reservation .group-13-Hipt0j {
+  background-color: transparent;
+  height: 197px;
+  left: 20px;
+  position: absolute;
+  top: 719px;
+  width: 410px;
+}
+
+.reservation .rectangle-copy-3-dEsAb9 {
+  background-color: var(--white);
+  border-radius: 20px;
+  height: 197px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 410px;
+}
+
+.reservation .tim-dEsAb9 {
+  background-color: transparent;
+  font-weight: 800;
+  height: 25px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 20px;
+  white-space: nowrap;
+  width: 33px;
+}
+
+.reservation .near-to-the-city-fr-copy-3-dEsAb9 {
+  background-color: transparent;
+  font-weight: 500;
+  height: 16px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 16px;
+  position: absolute;
+  text-align: left;
+  top: 55px;
+  white-space: nowrap;
+  width: 313px;
+}
+
+.reservation .description-2qMuan {
+  height: 122px;
+  left: 98px;
+  top: 762px;
+  width: 850px;
+}
+
+.reservation .description-FqgPgx {
+  color: var(--black);
+  font-family: var(--font-family-avenir-medium);
+  font-size: var(--font-size-l);
+  font-weight: 500;
+  height: 27px;
+  left: 0px;
+  letter-spacing: 0.00px;
+  line-height: 27px;
+  text-align: left;
+  top: 0px;
+  white-space: nowrap;
+  width: 107px;
+}
+
+.reservation .fast-secure-no-bo-FqgPgx {
+  background-color: transparent;
+  color: var(--delta);
+  font-family: var(--font-family-avenir-medium);
+  font-size: var(--font-size-m);
+  font-weight: 500;
+  height: 75px;
+  left: 0px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 47px;
+  width: 850px;
+}
+
+.reservation .spartan-sleep-logo-2qMuan {
+  background-color: transparent;
+  color: var(--black);
+  font-family: var(--font-family-avenir-black);
+  font-size: var(--font-size-xl);
+  font-weight: 900;
+  height: 33px;
+  left: 73px;
+  letter-spacing: 0.00px;
+  line-height: 33px;
+  position: absolute;
+  text-align: left;
+  top: 34px;
+  white-space: nowrap;
+  width: 153px;
+}
+
+.reservation .hotel-header-image-2qMuan {
+  background-color: transparent;
+  border-radius: 25px;
+  height: 400px;
+  left: 74px;
+  overflow: hidden;
+  position: absolute;
+  top: 147px;
+  width: 900px;
+}
+
+.reservation .rectangle-0rin7r {
+  background-color: #d7d7d7;
+  border-radius: 25px;
+  height: 400px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 900px;
+}
+
+.reservation .url-0rin7r {
+  background-color: transparent;
+  height: 510px;
+  left: -3px;
+  position: absolute;
+  top: -55px;
+  width: 907px;
+}
+
+.reservation .user-button-2qMuan {
+  background-color: transparent;
+  height: 34px;
+  left: 1370px;
+  position: absolute;
+  top: 33px;
+  width: 149px;
+}
+
+.reservation .hi-ekansh-G030YY {
+  background-color: transparent;
+  color: #da535c;
+  font-family: var(--font-family-avenir-heavy);
+  font-size: var(--font-size-m);
+  font-weight: 800;
+  height: 25px;
+  left: 0px;
+  letter-spacing: 0.00px;
+  line-height: 25px;
+  position: absolute;
+  text-align: left;
+  top: 4px;
+  white-space: nowrap;
+  width: 90px;
+}
+
+.reservation .view-G030YY {
+  height: 34px;
+  left: 115px;
+  top: 0px;
+  width: 34px;
+}
+
+.reservation .shape-qSI9PZ {
+  height: 34px;
+  width: 34px;
+}
+
+.reservation .description {
+  background-color: transparent;
+  position: absolute;
+}
+
+.reservation .oval {
+  background-color: var(--pot-pourri);
+  border-radius: 45px;
+  height: 45px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 45px;
+}
+
+.reservation .shape {
+  background-color: transparent;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+}
+
+.reservation .view {
+  background-color: transparent;
+  position: absolute;
+}

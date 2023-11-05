@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+
+    <!-- Welcome Card -->
+    <div class="welcome-card">
+                <h1>Hi, {{current_user.firstName}}!</h1>
+    </div>
+<!-- Reservation Section Begin -->
+<!--<div class="reservation-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+         Add white space to the left of the first column 
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 1</h5>
+                <p class="card-text">This is the first card in the first middle column.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 2</h5>
+                <p class="card-text">This is the second card in the first middle column.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 3</h5>
+                <p class="card-text">This is the first card in the second middle column.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Card 4</h5>
+                <p class="card-text">This is the second card in the second middle column.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+         Add white space to the right of the fourth column
+      </div>
+    </div>
+  </div>
+</div>-->
+<div class="reservations-container">
+  <h1>Your Upcoming Bookings</h1>
+  <div id="booking-cards">
+    
+  </div>
+  <!-- No Booking Card -->
+  {% if user_bookings|length == 0  %}
+  <div class="no-booking-card">
+      <p>Looks like you have no upcoming bookings - Let's go fix that!</p>
+      <a href="/" class="btn btn-primary">Book now!</a>
+  </div>
+  {% else %}
+
+  <!-- Booking Card 
+  example: OrderedMap { "data": OrderedMap { 
+    "offerId": "NRPQNQBOJM", 
+    "guests": List [ OrderedMap { 
+    "name": OrderedMap { "title": "MR", "firstName": "BOB", "lastName": "SMITH" }, 
+    "contact": OrderedMap { 
+      "phone": "+33679278416", 
+      "email": "bob.smith@email.com" } } ], 
+      "payments": List [ OrderedMap { 
+        "method": "creditCard", "card": OrderedMap { 
+          "vendorCode": "VI", 
+          "cardNumber": "0000000000000000", "expiryDate": "2026-01" } } ] } }
+  -->
+  {% for user_booking in user_bookings %}
+  <div class="booking-card">
+    <div class="booking-card-header">
+      <div class="booking-card-header-left">
+        <h3>Booking # {{ loop.index  }}</h3>
+        <p> {{ user_booking[0]}}</p>
+      </div>
+      <div class="booking-card-header-right">
+        <p>Check In: {{ user_booking[1] }}</p>
+        <p>Check Out: {{ user_booking[2] }}</p>
+      </div>
+    </div>
+    <div class="booking-card-body">
+      <div class="booking-card-body-left">
+        <img src="https://via.placeholder.com/150" alt="Hotel Image">
+      </div>
+      <div class="booking-card-body-right">
+        <h3>Room Name</h3>
+        <p> Guests: {{user_booking[3]}}, Bedrooms: {{user_booking[4]}}</p>
+        <p> Price: {{ user_booking[5] }}</p>
+      </div>
+    </div>
+    <div class="booking-card-footer">
+      <button>Cancel Booking</button>
+    </div>
+  </div>
+{% endfor %}  
+<div class="no-booking-card">
+  <p>Want to book more hotels!</p>
+  <a href="/" class="btn btn-primary">Book now!</a>
+</div>
+{% endif %}
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
+{% endblock %}

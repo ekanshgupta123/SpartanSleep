@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+<div class = "Pay Now">
+    <div class = "container">
+        <div class = "col-lg-6">
+            <h2>Pay Now</h2>
+            <form method = "POST" novalidate>
+                {{form.hidden_tag()}}
+                <p>{{ form.name.label }}<br>
+                    {{ form.name(class="form-control", size=255) }}
+                </p>
+                <p> {{ form.email.label}}<br>
+                {{ form.email(class="form-control", size =255) }}
+                </p>
+                <p> {{ form.phone.label}}<br>
+                    {{ form.phone(class="form-control", size =255) }}
+                </p>
+                <p> {{ form.card_number.label}}<br>
+                    {{ form.card_number(class="form-control", size =255) }}
+                </p>
+                <p> {{ form.expiry_date.label}}<br>
+                    {{ form.expiry_date(class="form-control", size =255) }}
+                </p>
+                <p> {{ form.cvv.label}}<br>
+                    {{ form.cvv(class="form-control", size =255) }}
+                </p>
+                <p>
+                    {{ form.submit() }}
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
