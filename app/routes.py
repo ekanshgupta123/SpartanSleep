@@ -177,6 +177,45 @@ def search():
         print(f"Error fetching data from Amadeus API: {e}")
         return jsonify([])  # Return an empty list in case of an error
 
+@spartan_app.route('/hotel-view/<string:hotel_id>', methods = ['GET', 'POST'])
+def hotel_view(hotel_id):
+    amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds={hotel_id}"
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+
+    try:
+        # Send a GET request to the Amadeus API
+        response = requests.get(amadeus_api_url, headers=headers)
+
+        if response.status_code == 200:
+            # Extract and process hotel data from the response
+            hotel_data = response.json()
+
+            if isinstance(hotel_data, (dict, list)):
+                hotel_data = hotel_data["data"][0]
+                print("Hotel Name:", hotel_data['name'])
+                return render_template('hotel-view.html', hotel_data=hotel_data)
+            else:
+                return "Invalid hotel data format"
+        else:
+            response_json = response.json()  # Parse the JSON response
+            # return response_json
+            if "errors" in response_json and isinstance(response_json["errors"], list):
+                error_list = response_json["errors"]
+
+            if error_list:
+                first_error = error_list[0]  # Assuming the first error message is what you want
+                error_title = first_error.get("title", "Unknown Error")
+                print(error_title)  # Print the "title" property
+                if (error_title == 'NOTHING FOUND FOR REQUESTED CITY'):
+                    return "There are no hotels in the city radius"
+                else:
+                    return "Some other error occurred"
+    except Exception as e:
+        print(f"Error fetching hotel data from Amadeus API: {e}")
+        return "An error occurred"
+
 @spartan_app.route('/hotels/<cityCode>/')
 def hotel_search(cityCode):
     # Construct the Amadeus API URL for hotel search based on the city and country
@@ -230,7 +269,9 @@ def aboutUs():
 # manage reservations path
 @spartan_app.route('/reservations')
 def reservations():
-    return render_template('/reservations.html')
+    user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price).filter_by(user_id=current_user.id).all()
+    # print(len(user_bookings))
+    return render_template('/reservations.html', user_bookings=user_bookings)
 
 # hotel-search path
 @spartan_app.route('/hotel-search')
@@ -323,16 +364,58 @@ def hotel_book():
 
 @spartan_app.route('/checkout/pay-now/<string:hotel_id>', methods=['GET', 'POST'])
 def checkoutPayNow(hotel_id):
+    amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds={hotel_id}"
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+
+    try:
+        # Send a GET request to the Amadeus API
+        response = requests.get(amadeus_api_url, headers=headers)
+
+        if response.status_code == 200:
+            # Extract and process hotel data from the response
+            hotel_data = response.json()
+
+            if isinstance(hotel_data, (dict, list)):
+                hotel_data = hotel_data["data"][0]
+                hotel_name = hotel_data['name']
+        else:
+            response_json = response.json()  # Parse the JSON response
+            # return response_json
+            if "errors" in response_json and isinstance(response_json["errors"], list):
+                error_list = response_json["errors"]
+
+            if error_list:
+                first_error = error_list[0]  # Assuming the first error message is what you want
+                error_title = first_error.get("title", "Unknown Error")
+                print(error_title)  # Print the "title" property
+                if (error_title == 'NOTHING FOUND FOR REQUESTED CITY'):
+                    return "There are no hotels in the city radius"
+                else:
+                    return "Some other error occurred"
+    except Exception as e:
+        print(f"Error fetching hotel data from Amadeus API: {e}")
+        return "An error occurred"
+
     # Logic for Pay Now checkout
+    # we will need to get the start_date, end_date, total_guests, and price through parameters (it is hard coded right now)
     form = PaymentForm()
     if form.validate_on_submit():
         payment = Payment(
+            user_id = current_user.id,
             name=form.name.data,
             email=form.email.data,
             phone=form.phone.data,
             card_number=form.card_number.data,
             expiry_date=form.expiry_date.data,
             cvv=form.cvv.data,
+            start_date = '11/12/2023',
+            end_date = '12/12/2023',
+            hotelName = hotel_name,
+            hotelRooms = 1,
+            totalGuests = 1,
+            price = 100
         )
         db.session.add(payment)
         db.session.commit()

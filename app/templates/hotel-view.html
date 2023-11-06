@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block head %}
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='css/reservation.css') }}" />
+{% endblock %}
+{% block mycontent %}
+    <input type="hidden" id="anPageName" name="page" value="reservation" />
+    <div class="reservation screen">
+      <div class="pricing-2qMuan">
+        <div class="x228-fJQx2o">$228</div>
+        <div class="starts-from-fJQx2o">Starts from:</div>
+      </div>
+      <div class="hotel-name-2qMuan">
+        <div class="san-jose-FEhXH1">{{hotel_data.address.countryCode}}</div>
+        <h1 class="title-FEhXH1">{{hotel_data.name}}</h1>
+      </div>
+      <div class="number-of-rooms-2qMuan">
+        <div class="x2-bedroom-0r0Ge1 avenir-heavy-normal-black-18px">2 Bedroom</div>
+        <div class="group-3-t2pGgE">
+            <div class="oval"></div>
+            <div class="view-pjPGy5 view">
+              <img
+                class="shape-XZRxSO shape"
+                src="{{ url_for('static',filename='img/reservation/reservation-shape-BA248263-3DAB-4556-B1B9-6B81AE9FCB4E@2x.png') }}"
+                alt="Shape"
+              />
+            </div>
+        </div>
+      </div>
+      <div class="number-of-bathrooms-2qMuan">
+        <div class="x2-bathroom-t2pGgE avenir-heavy-normal-black-18px">2 Bathroom</div>
+        <div class="group-3-t2pGgE">
+          <div class="oval"></div>
+          <div class="view-pjPGy5 view">
+            <img
+              class="shape-XZRxSO shape"
+              src="{{ url_for('static',filename='img/reservation/reservation-shape-17DCF4AD-2DA2-4DC5-AFF8-B068EAF8A46F@2x.png') }}"
+              alt="Shape"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="area-2qMuan">
+        <div class="x1250-ft-6TipRZ avenir-heavy-normal-black-18px">1250 ft²</div>
+        <div class="group-4-6TipRZ">
+          <div class="oval-copy-2-tW9DmP"></div>
+          <div class="view-tW9DmP view">
+            <img
+              class="shape-HUShFb shape"
+              src="{{ url_for('static',filename='img/reservation/reservation-shape-5C599CA9-BE2A-490B-843E-57B44E230ACF@2x.png') }}"
+              alt="Shape"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="security-2qMuan">
+        <div class="highly-secured-Gnn1vF avenir-heavy-normal-black-18px">Highly Secured</div>
+        <div class="group-5-Gnn1vF">
+          <div class="oval-copy-3-C5IOHv"></div>
+          <div class="view-C5IOHv view">
+            <img
+              class="shape-u1G9uz shape"
+              src="{{ url_for('static',filename='img/reservation/reservation-shape-6E7FFBE5-19F5-4D81-89A3-2ED36ADCFB61@2x.png') }}"
+              alt="Shape"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="review-box-2qMuan">
+        <div class="rectangle-Hipt0j"></div>
+        <div class="reviews-Hipt0j">Reviews</div>
+        <div class="group-10-Hipt0j">
+          <div class="rectangle-prGmwI"></div>
+          <div class="travis-prGmwI avenir-heavy-normal-black-18px">Travis</div>
+          <p class="near-to-the-city-fr-prGmwI avenir-normal-delta-12px">
+            Near to the city. Friendly staff, clean and calm bathrooms
+          </p>
+        </div>
+        <div class="group-11-Hipt0j">
+          <div class="rectangle-copy-hjoacg"></div>
+          <div class="krishna-hjoacg avenir-heavy-normal-black-18px">Krishna</div>
+          <p class="near-to-the-city-fr-copy-hjoacg avenir-normal-delta-12px">
+            Near to the city. Friendly staff, clean and calm bathrooms
+          </p>
+        </div>
+        <div class="group-12-Hipt0j">
+          <div class="rectangle-copy-2-w9WsLt"></div>
+          <div class="bianca-w9WsLt avenir-heavy-normal-black-18px">Bianca</div>
+          <p class="near-to-the-city-fr-copy-2-w9WsLt avenir-normal-delta-12px">
+            Near to the city. Friendly staff, clean and calm bathrooms
+          </p>
+        </div>
+        <div class="group-13-Hipt0j">
+          <div class="rectangle-copy-3-dEsAb9"></div>
+          <div class="tim-dEsAb9 avenir-heavy-normal-black-18px">Tim</div>
+          <p class="near-to-the-city-fr-copy-3-dEsAb9 avenir-normal-delta-12px">
+            Near to the city. Friendly staff, clean and calm bathrooms
+          </p>
+        </div>
+      </div>
+      <div class="description-2qMuan description">
+        <div class="description-FqgPgx description">Description</div>
+        <p class="fast-secure-no-bo-FqgPgx">
+          Fast &amp; Secure, No Booking or Cancellation Fee. Book Your Hotel Online and Save. Choose from Hundreds of
+          Thousands of Properties in Over 200 Countries and Territories, Travel Guides, Exclusive Deals, Luxury Hotels.
+          Check Photos. Budget Hotels. Earn Reward Nights.
+        </p>
+      </div>    
+      <div class="hotel-header-image-2qMuan">
+        <div class="rectangle-0rin7r"></div>
+        app/static/img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg
+        <img class="url-0rin7r" 
+        src="{{ url_for('static',filename='img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg') }}" alt="url" />
+      </div>
+    </div>
+    <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel_data.hotelId }}">Book Now</button>
+    <div class="book-now-modal">
+        <div class="modal-content">
+            <span id="closeModalBtn" class="close">&times;</span>
+            <h5>Your payment options:</h5>
+            <div class="modal-options">
+                <div>
+                    <h6>Pay Now</h6>
+                    <ul>
+                        <li>We will process your payment in your local currency</li>
+                        <li>More ways to pay: use Debit/Credit card</li>
+                    </ul>
+                    <button id="payNowBtn" data-hotel-id="" onclick="goToCheckout('pay-now')">Pay Now</button>
+                </div>
+                <div>
+                    <h6>Pay when you stay</h6>
+                    <ul>
+                        <li>You will not be charged until your stay</li>
+                        <li> Pay the property directly in their preferred currency</li>
+                    </ul>
+                    <button id="payLaterBtn" data-hotel-id="" onclick="goToCheckout('pay-later')">Pay Later</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var modal = document.querySelector('.book-now-modal');
+        var closeModalBtn = document.getElementById('closeModalBtn');
+    
+        // Function to open the modal
+        function openModal() {
+            modal.style.display = 'block';
+        }
+    
+        // Function to close the modal
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+    
+        // Attach click event to all 'Book Now' buttons
+        var bookNowButtons = document.querySelectorAll('.hotel-card-book-now-button');
+        // Assuming each hotel card has a data attribute 'data-hotel-id'
+        bookNowButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var hotelId = this.dataset.hotelId;
+            var payNowBtn = document.getElementById('payNowBtn');
+            var payLaterBtn = document.getElementById('payLaterBtn');
+            payNowBtn.dataset.hotelId = hotelId;
+            payLaterBtn.dataset.hotelId = hotelId;
+            openModal();
+        });
+    });
+    
+    
+        // Close the modal when the close button is clicked
+        closeModalBtn.addEventListener('click', closeModal);
+    
+        // Close the modal if the user clicks outside of it
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    });
+    
+    function goToCheckout(checkoutType) {
+        var hotelId = document.getElementById('payNowBtn').dataset.hotelId; // Both buttons have the same hotel ID
+        if (hotelId) {
+            var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId;
+            window.location.href = checkoutUrl;
+        } else {
+            console.error('Hotel ID is not set');
+        }
+    } 
+    </script>    
+{% endblock %}
