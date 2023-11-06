@@ -35,8 +35,14 @@
         <h3 class="hotel-card-name">{{ hotel.name }}</h3>
         <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
         <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
-        <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel.hotelId }}">Book Now</button>
-        
+        <!--<button class="hotel-card-book-now-button" data-hotel-id="{{ hotel.hotelId }}">Book Now</button>
+        -->
+        <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel.hotelId }}" 
+            data-city-code="{{ cityCode }}" data-check-in="{{ checkIn }}" 
+            data-check-out="{{ checkOut }}" data-guests="{{ guests }}" 
+            data-rooms="{{ rooms }}" data-hotel-name="{{ hotel.name }}" 
+            data-country-code="{{ hotel.address.countryCode }}" 
+            data-distance="{{ hotel.distance.value }}">Book Now</button>
       </div>
     </div>
   {% endfor %}
@@ -51,7 +57,7 @@
                         <li>We will process your payment in your local currency</li>
                         <li>More ways to pay: use Debit/Credit card</li>
                     </ul>
-                    <button id="payNowBtn" data-hotel-id="" onclick="goToCheckout('pay-now')">Pay Now</button>
+                    <button id="payNowBtn" onclick="goToCheckout(this)">Pay Now</button>
                 </div>
                 <div>
                     <h6>Pay when you stay</h6>
@@ -59,7 +65,7 @@
                         <li>You will not be charged until your stay</li>
                         <li> Pay the property directly in their preferred currency</li>
                     </ul>
-                    <button id="payLaterBtn" data-hotel-id="" onclick="goToCheckout('pay-later')">Pay Later</button>
+                    <button id="payLaterBtn" onclick="goToCheckout(this)">Pay when you stay</button>
                 </div>
             </div>
         </div>

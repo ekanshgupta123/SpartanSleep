@@ -605,7 +605,7 @@ ul, ol {
 .booking-form form .select-option {
 	margin-bottom: 15px;
 }
-.my-label {
+.booking-form form .select-option .my-label {
     /* Add your styles here */
 	font-size: 14px;
 	color: #707079;

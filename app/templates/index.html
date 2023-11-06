@@ -34,17 +34,17 @@
                                 <label for="guest" class="my-label">Guests:</label>
                                 <div class="guest-wrapper">
                                     <button class="guest-button btn btn-primary" id="guest-decrease">-</button>
-                                    <input type="number" class="guestInputBox "id="guest" name="guest" min="1" placeholder="1">
+                                    <input type="number" class="guestInputBox "id="guest" name="guest" min="1" value="1">
                                     <button class="guest-button btn btn-primary" id="guest-increase">+</button>
                                 </div>
-                                
                             </div>
                             <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room" room="room" name="room">
-                                    <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
-                                </select>
+                                <label for="room">Rooms:</label>
+                                <div class="guest-wrapper">
+                                    <button class="guest-button btn btn-primary" id="guest-decrease">-</button>
+                                    <input type="number" class="guestInputBox "id="guest" name="room" min="1" value="1">
+                                    <button class="guest-button btn btn-primary" id="guest-increase">+</button>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Check Availability</button>
                         </form>

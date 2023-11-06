@@ -159,4 +159,44 @@
         guestInput.addEventListener('change', updateGuestCount);
     });
 
+    /*------------------
+        Event listener for hotel-card-book-now-button (index.html)
+    --------------------*/
+    document.querySelectorAll('.hotel-card-book-now-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var hotelId = this.getAttribute('data-hotel-id');
+            var cityCode = this.getAttribute('data-city-code');
+            var checkIn = this.getAttribute('data-check-in');
+            var checkOut = this.getAttribute('data-check-out');
+            var guests = this.getAttribute('data-guests');
+            var rooms = this.getAttribute('data-rooms');
+            var hotelName = this.getAttribute('data-hotel-name');
+            var countryCode = this.getAttribute('data-country-code');
+            var distance = this.getAttribute('data-distance');
+    
+            var payNowBtn = document.getElementById('payNowBtn');
+            var payLaterBtn = document.getElementById('payLaterBtn');
+    
+            payNowBtn.setAttribute('data-hotel-id', hotelId);
+            payNowBtn.setAttribute('data-city-code', cityCode);
+            payNowBtn.setAttribute('data-check-in', checkIn);
+            payNowBtn.setAttribute('data-check-out', checkOut);
+            payNowBtn.setAttribute('data-guests', guests);
+            payNowBtn.setAttribute('data-rooms', rooms);
+            payNowBtn.setAttribute('data-hotel-name', hotelName);
+            payNowBtn.setAttribute('data-country-code', countryCode);
+            payNowBtn.setAttribute('data-distance', distance);
+    
+            payLaterBtn.setAttribute('data-hotel-id', hotelId);
+            payLaterBtn.setAttribute('data-city-code', cityCode);
+            payLaterBtn.setAttribute('data-check-in', checkIn);
+            payLaterBtn.setAttribute('data-check-out', checkOut);
+            payLaterBtn.setAttribute('data-guests', guests);
+            payLaterBtn.setAttribute('data-rooms', rooms);
+            payLaterBtn.setAttribute('data-hotel-name', hotelName);
+            payLaterBtn.setAttribute('data-country-code', countryCode);
+            payLaterBtn.setAttribute('data-distance', distance);
+        });
+    });
+
 })(jQuery);
