@@ -106,6 +106,10 @@
           Check Photos. Budget Hotels. Earn Reward Nights.
         </p>
       </div>    
+      <p>Check In: {{ checkIn }}</p>
+      <p>Check Out: {{ checkOut }}</p>
+      <p>Guests: {{ guests }}</p>
+      <p>Rooms: {{ rooms }}</p>
       <div class="hotel-header-image-2qMuan">
         <div class="rectangle-0rin7r"></div>
         app/static/img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg
@@ -159,10 +163,24 @@
         bookNowButtons.forEach(function(button) {
         button.addEventListener('click', function() {
             var hotelId = this.dataset.hotelId;
+            var checkIn = "{{ checkIn }}"; // Add the check-in date from index.html / hotel-search.html
+            var checkOut = "{{ checkOut }}"; // Add the check-out date from index.html / hotel-search.html
+            var guests = "{{ guests }}"; // Add the number of guests from index.html / hotel-search.html
+            var rooms = "{{ rooms }}"; // Add the number of rooms from index.html / hotel-search.html
             var payNowBtn = document.getElementById('payNowBtn');
             var payLaterBtn = document.getElementById('payLaterBtn');
             payNowBtn.dataset.hotelId = hotelId;
+            payNowBtn.dataset.checkIn = checkIn;
+            payNowBtn.dataset.checkOut = checkOut;
+            payNowBtn.dataset.guests = guests;
+            payNowBtn.dataset.rooms = rooms;
+
             payLaterBtn.dataset.hotelId = hotelId;
+            payLaterBtn.dataset.checkIn = checkIn;
+            payLaterBtn.dataset.checkOut = checkOut;
+            payLaterBtn.dataset.guests = guests;
+            payLaterBtn.dataset.rooms = rooms;
+
             openModal();
         });
     });
@@ -181,8 +199,14 @@
     
     function goToCheckout(checkoutType) {
         var hotelId = document.getElementById('payNowBtn').dataset.hotelId; // Both buttons have the same hotel ID
+        var checkIn = document.getElementById('payNowBtn').dataset.checkIn;
+        var checkOut = document.getElementById('payNowBtn').dataset.checkOut;
+        var guests = document.getElementById('payNowBtn').dataset.guests;
+        var rooms = document.getElementById('payNowBtn').dataset.rooms;
+        
         if (hotelId) {
-            var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId;
+            // var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId;
+            var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId + '/' + checkIn + '/' + checkOut + '/' + guests + '/' + rooms;
             window.location.href = checkoutUrl;
         } else {
             console.error('Hotel ID is not set');

@@ -194,8 +194,16 @@ def hotel_view(hotel_id):
 
             if isinstance(hotel_data, (dict, list)):
                 hotel_data = hotel_data["data"][0]
+                
                 print("Hotel Name:", hotel_data['name'])
-                return render_template('hotel-view.html', hotel_data=hotel_data)
+                #return render_template('hotel-view.html', hotel_data=hotel_data)
+
+                # Get the check-in, check-out, guests, and rooms from the request parameters
+                checkIn = request.args.get('checkIn')
+                checkOut = request.args.get('checkOut')
+                guests = request.args.get('guests')
+                rooms = request.args.get('rooms')
+                return render_template('hotel-view.html', hotel_data=hotel_data, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms)
             else:
                 return "Invalid hotel data format"
         else:
@@ -297,6 +305,7 @@ def hotel_searchs():
             hotel_data = response.json()
             
             if isinstance(hotel_data, (dict, list)):
+                # return render_template('hotel-search.html', hotel_data=hotel_data)
                 checkIn = request.args.get('date-in')
                 checkOut = request.args.get('date-out')
                 guests = request.args.get('guest')
@@ -363,7 +372,7 @@ def hotel_book():
 
 
 @spartan_app.route('/checkout/pay-now/<string:hotel_id>', methods=['GET', 'POST'])
-def checkoutPayNow(hotel_id):
+def checkoutPayNow(hotel_id, start_date, end_date, total_guests, total_rooms):
     amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds={hotel_id}"
     headers = {
         'Authorization': f'Bearer {get_access_token()}'
@@ -410,12 +419,12 @@ def checkoutPayNow(hotel_id):
             card_number=form.card_number.data,
             expiry_date=form.expiry_date.data,
             cvv=form.cvv.data,
-            start_date = '11/12/2023',
-            end_date = '12/12/2023',
+            start_date = start_date,
+            end_date = end_date,
             hotelName = hotel_name,
-            hotelRooms = 1,
-            totalGuests = 1,
-            price = 100
+            hotelRooms = total_rooms,
+            totalGuests = total_guests,
+            price = 100 # need to add price still!
         )
         db.session.add(payment)
         db.session.commit()
