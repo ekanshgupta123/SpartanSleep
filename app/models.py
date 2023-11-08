@@ -31,6 +31,7 @@ class Payment(db.Model, UserMixin):
     hotelRooms = db.Column(db.Integer, nullable=False)
     totalGuests = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
+    
     user = relationship("User", backref="payments")
 
 
