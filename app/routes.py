@@ -427,3 +427,18 @@ def checkoutPayLater(hotel_id):
 def confirmBooking():
     # Logic for Pay Later checkout
     return render_template('confirm-booking.html')
+
+
+@spartan_app.route('/delete-reservation/<int:payment_id>', methods=['POST'])
+def delete_reservation(payment_id):
+    payment = Payment.query.get_or_404(payment_id)
+    if payment.user_id != current_user.id:
+        # Prevent deletion if the current user does not own the reservation
+        return jsonify({'error': 'Unauthorized to delete this reservation'}), 401
+
+    try:
+        db.session.delete(payment)
+        db.session.commit()
+        return redirect(url_for('reservations'))
+    except Exception as e:
+        return jsonify({'error': 'There was a problem deleting the reservation: ' + str(e)}), 500
