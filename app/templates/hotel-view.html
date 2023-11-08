@@ -103,13 +103,13 @@
         <p class="fast-secure-no-bo-FqgPgx">
           Fast &amp; Secure, No Booking or Cancellation Fee. Book Your Hotel Online and Save. Choose from Hundreds of
           Thousands of Properties in Over 200 Countries and Territories, Travel Guides, Exclusive Deals, Luxury Hotels.
-          Check Photos. Budget Hotels. Earn Reward Nights.
+          Check Photos. Budget Hotels. Earn Reward Nights. <br>
+          <br>Check In: {{ checkIn }}
+          <br>Check Out: {{ checkOut }}
+          <br>Guests: {{ guests }}
+          <br>Rooms: {{ rooms }}
         </p>
       </div>    
-      <p>Check In: {{ checkIn }}</p>
-      <p>Check Out: {{ checkOut }}</p>
-      <p>Guests: {{ guests }}</p>
-      <p>Rooms: {{ rooms }}</p>
       <div class="hotel-header-image-2qMuan">
         <div class="rectangle-0rin7r"></div>
         app/static/img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg
@@ -117,7 +117,7 @@
         src="{{ url_for('static',filename='img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg') }}" alt="url" />
       </div>
     </div>
-    <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel_data.hotelId }}">Book Now</button>
+    <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel_data.hotelId }}" data-check-in="{{ checkIn }}" data-check-out="{{ checkOut }}" data-guests="{{ guests }}" data-rooms="{{ rooms }}">Book Now</button>
     <div class="book-now-modal">
         <div class="modal-content">
             <span id="closeModalBtn" class="close">&times;</span>
@@ -163,28 +163,40 @@
         bookNowButtons.forEach(function(button) {
         button.addEventListener('click', function() {
             var hotelId = this.dataset.hotelId;
-            var checkIn = "{{ checkIn }}"; // Add the check-in date from index.html / hotel-search.html
-            var checkOut = "{{ checkOut }}"; // Add the check-out date from index.html / hotel-search.html
-            var guests = "{{ guests }}"; // Add the number of guests from index.html / hotel-search.html
-            var rooms = "{{ rooms }}"; // Add the number of rooms from index.html / hotel-search.html
+            var checkIn = this.dataset.checkIn;
+            var checkOut = this.dataset.checkOut;
+            var guests = this.dataset.guests;
+            var rooms = this.dataset.rooms;
+
             var payNowBtn = document.getElementById('payNowBtn');
-            var payLaterBtn = document.getElementById('payLaterBtn');
             payNowBtn.dataset.hotelId = hotelId;
             payNowBtn.dataset.checkIn = checkIn;
             payNowBtn.dataset.checkOut = checkOut;
             payNowBtn.dataset.guests = guests;
             payNowBtn.dataset.rooms = rooms;
+            // Debugging
+            console.log('Line 179: checkIn:', checkIn);
+            console.log('checkOut:', checkOut);
+            console.log('guests:', guests);
+            console.log('rooms:', rooms);
+            console.log('hotelId:', hotelId);
 
+            var payLaterBtn = document.getElementById('payLaterBtn');
             payLaterBtn.dataset.hotelId = hotelId;
             payLaterBtn.dataset.checkIn = checkIn;
             payLaterBtn.dataset.checkOut = checkOut;
             payLaterBtn.dataset.guests = guests;
             payLaterBtn.dataset.rooms = rooms;
-
+            
+            // Debugging
+            console.log('Line 193: checkIn:', checkIn);
+            console.log('checkOut:', checkOut);
+            console.log('guests:', guests);
+            console.log('rooms:', rooms);
+            console.log('hotelId:', hotelId);
             openModal();
         });
     });
-    
     
         // Close the modal when the close button is clicked
         closeModalBtn.addEventListener('click', closeModal);
@@ -203,10 +215,18 @@
         var checkOut = document.getElementById('payNowBtn').dataset.checkOut;
         var guests = document.getElementById('payNowBtn').dataset.guests;
         var rooms = document.getElementById('payNowBtn').dataset.rooms;
-        
+
+        // Debugging
+        console.log('Line 221: goToCheckout: checkIn:', checkIn);
+        console.log('checkOut:', checkOut);
+        console.log('guests:', guests);
+        console.log('rooms:', rooms);
+        console.log('hotelId:', hotelId);
+
         if (hotelId) {
-            // var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId;
-            var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId + '/' + checkIn + '/' + checkOut + '/' + guests + '/' + rooms;
+            var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId +
+                '?checkIn=' + checkIn + '&checkOut=' + checkOut + 
+                '&guests=' + guests + '&rooms=' + rooms;
             window.location.href = checkoutUrl;
         } else {
             console.error('Hotel ID is not set');

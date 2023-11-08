@@ -35,7 +35,7 @@
         <h3 class="hotel-card-name">{{ hotel.name }}</h3>
         <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
         <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
-        
+      
         <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel.hotelId }}" 
             data-city-code="{{ cityCode }}" data-check-in="{{ checkIn }}" 
             data-check-out="{{ checkOut }}" data-guests="{{ guests }}" 
@@ -44,14 +44,17 @@
             data-distance="{{ hotel.distance.value }}">Book Now</button>
       </div>
     </div>-->
-    <div class="hotel-card">
-        <div class="hotel-card-image"></div>
-        <div class="hotel-card-details">
-          <a href = "{{url_for('hotel_view', hotel_id=hotel.hotelId, checkIn, checkOut, guests, rooms)}}" class="hotel-card-name">{{ hotel.name }}</a>
-          <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
-          <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+    <a href="/hotel-view/{{ hotel.hotelId }}">
+    <a href="/hotel-view/{{ hotel.hotelId }}?checkIn={{ checkIn }}&checkOut={{ checkOut }}&guests={{ guests }}&rooms={{ rooms }}">
+        <div class="hotel-card">
+            <div class="hotel-card-image"></div>
+            <div class="hotel-card-details">
+            <h3 class="hotel-card-name">{{ hotel.name }}</h3>
+            <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
+            <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+            </div>
         </div>
-      </div>
+    </a>
   {% endfor %}
     <div class="book-now-modal">
         <div class="modal-content">
