@@ -17,8 +17,9 @@ def before_request():
     session.permanent = True
     spartan_app.permanent_session_lifetime = timedelta(minutes=15) 
 
-@spartan_app.before_first_request
-def create_tables():
+#@spartan_app.before_first_request
+#def create_tables():
+with spartan_app.app_context():
     db.create_all()
 
 
@@ -47,12 +48,14 @@ def login():
 
 # logout path
 @spartan_app.route("/logout")
+@login_required
 def logout():
     db.session.commit()
     logout_user()
     return redirect('/login')
 
 @spartan_app.route('/delete/<int:id>')
+@login_required
 def delete(id):
     # attempt to get the user by provided id, and if it doesn't exist -> return 404 error
     user = User.query.get_or_404(id)
@@ -136,6 +139,7 @@ def home():
 
 # search for cities
 @spartan_app.route('/search', methods=['POST'])
+@login_required
 def search():
 
     search_term = request.form.get('text', '').strip()
@@ -177,6 +181,7 @@ def search():
         return jsonify([])  # Return an empty list in case of an error
 
 @spartan_app.route('/hotel-view/<string:hotel_id>', methods = ['GET', 'POST'])
+@login_required
 def hotel_view(hotel_id):
     amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds={hotel_id}"
     headers = {
@@ -191,10 +196,18 @@ def hotel_view(hotel_id):
             # Extract and process hotel data from the response
             hotel_data = response.json()
 
+            # Extract and process user inputted data from the form
+            checkIn = request.args.get('checkIn')
+            checkOut = request.args.get('checkOut')
+            guests = request.args.get('guests')
+            rooms = request.args.get('rooms')
+
+            print(f"checkIn: {checkIn}, checkOut: {checkOut}, guests: {guests}, rooms: {rooms}")
+
             if isinstance(hotel_data, (dict, list)):
                 hotel_data = hotel_data["data"][0]
                 print("Hotel Name:", hotel_data['name'])
-                return render_template('hotel-view.html', hotel_data=hotel_data)
+                return render_template('hotel-view.html', hotel_data=hotel_data, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms)
             else:
                 return "Invalid hotel data format"
         else:
@@ -267,13 +280,15 @@ def aboutUs():
 
 # manage reservations path
 @spartan_app.route('/reservations')
+@login_required
 def reservations():
     user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price, Payment.id).filter_by(user_id=current_user.id).all()
-    # print(len(user_bookings))
+    print(len(user_bookings))
     return render_template('/reservations.html', user_bookings=user_bookings)
 
 # hotel-search path
 @spartan_app.route('/hotel-search')
+@login_required
 def hotel_searchs():
 #    return render_template('/hotel-search.html')
 # Get the value of the "cityCode" query parameter from the request
@@ -296,7 +311,11 @@ def hotel_searchs():
             hotel_data = response.json()
             
             if isinstance(hotel_data, (dict, list)):
-                return render_template('hotel-search.html', hotel_data=hotel_data)
+                checkIn = request.args.get('date-in')
+                checkOut = request.args.get('date-out')
+                guests = request.args.get('guest')
+                rooms = request.args.get('room')
+                return render_template('hotel-search.html', hotel_data=hotel_data, authorized=current_user.is_authenticated, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms)
             else:
                 return "Invalid hotel data format"
         else:
@@ -357,6 +376,85 @@ def hotel_book():
         return "An error occurred"
 
 
+@spartan_app.route('/checkout/<string:checkout_type>/<string:hotel_id>', methods=['GET', 'POST'])
+@login_required
+def checkout(checkout_type, hotel_id):
+    amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds={hotel_id}"
+    headers = {
+        'Authorization': f'Bearer {get_access_token()}'
+    }
+
+    try:
+        # Send a GET request to the Amadeus API
+        response = requests.get(amadeus_api_url, headers=headers)
+
+        if response.status_code == 200:
+            # Extract and process hotel data from the response
+            hotel_data = response.json()
+
+            if isinstance(hotel_data, (dict, list)):
+                hotel_data = hotel_data["data"][0]
+                hotel_name = hotel_data['name']
+        else:
+            response_json = response.json()  # Parse the JSON response
+            # return response_json
+            if "errors" in response_json and isinstance(response_json["errors"], list):
+                error_list = response_json["errors"]
+
+            if error_list:
+                first_error = error_list[0]  # Assuming the first error message is what you want
+                error_title = first_error.get("title", "Unknown Error")
+                print(error_title)  # Print the "title" property
+                if (error_title == 'NOTHING FOUND FOR REQUESTED CITY'):
+                    return "There are no hotels in the city radius"
+                else:
+                    return "Some other error occurred"
+    except Exception as e:
+        print(f"Error fetching hotel data from Amadeus API: {e}")
+        return "An error occurred" 
+
+    if checkout_type == "pay-now":
+        # Logic for Pay Now checkout
+        # You can get the start_date, end_date, total_guests, and price from the URL parameters
+        start_date = request.args.get("checkIn")
+        end_date = request.args.get("checkOut")
+        total_guests = request.args.get("guests")
+        total_rooms = request.args.get("rooms")
+
+        print(f"checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}")
+        form = PaymentForm()
+        if form.validate_on_submit():
+            payment = Payment(
+                user_id=current_user.id,
+                name=form.name.data,
+                email=form.email.data,
+                phone=form.phone.data,
+                card_number=form.card_number.data,
+                expiry_date=form.expiry_date.data,
+                cvv=form.cvv.data,
+                start_date=start_date,
+                end_date=end_date,
+                hotelName=hotel_name,
+                hotelRooms=total_rooms,
+                totalGuests=total_guests,
+                price=100  # Use the actual price obtained from the URL parameter
+            )
+            db.session.add(payment)
+            db.session.commit()
+            flash('Payment Accepted!')
+            return redirect(url_for('reservations'))
+
+        return render_template('checkout-pay-now.html', hotel_id=hotel_id, form=form)
+    elif checkout_type == "pay-later":
+        # Logic for Pay Later checkout
+        # Implement the logic for Pay Later checkout here
+
+        return render_template('checkout-pay-later.html', hotel_id=hotel_id)  # Modify as needed
+    else:
+        # Handle invalid checkout_type
+        return "Invalid checkout type"
+
+'''
 @spartan_app.route('/checkout/pay-now/<string:hotel_id>', methods=['GET', 'POST'])
 def checkoutPayNow(hotel_id):
     amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds={hotel_id}"
@@ -422,8 +520,9 @@ def checkoutPayNow(hotel_id):
 def checkoutPayLater(hotel_id):
     # Logic for Pay Later checkout
     return render_template('checkout-pay-later.html', hotel_id=hotel_id)
-
+'''
 @spartan_app.route('/confirm-booking')
+@login_required
 def confirmBooking():
     # Logic for Pay Later checkout
     return render_template('confirm-booking.html')

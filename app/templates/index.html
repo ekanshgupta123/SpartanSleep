@@ -8,7 +8,7 @@
                     <div class="hero-text">
                         <h1>SpartanSleep</h1>
                         <p>Your online destination to book hotel rooms suited for your Spartan needs.</p>
-                        <a href="#" class="primary-btn">Discover Now</a>
+                        <a href="#" class="primary-btn1">Discover Now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
@@ -18,31 +18,33 @@
                             <!-- City search -->
                             <div class="city-option">
                                 <label for="cityCode">Enter a city code:</label>
-                                <input type="text" class="city-code" id="search-input" name="cityCode" placeholder="Enter a city code">
+                                <input type="text" class="city-code" id="search-input" name="cityCode" placeholder="">
                             </div>
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
+                                <input type="text" class="date-input" id="date-in" name="date-in">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
+                                <input type="text" class="date-input" id="date-out" name="date-out">
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">2 Adults</option>
-                                    <option value="">3 Adults</option>
-                                </select>
+                                <label for="guest" class="my-label">Guests:</label>
+                                <div class="guest-wrapper">
+                                    <button class="guest-button btn btn-primary" id="guest-decrease">-</button>
+                                    <input type="number" class="guestInputBox "id="guest" name="guest" min="1" value="1">
+                                    <button class="guest-button btn btn-primary" id="guest-increase">+</button>
+                                </div>
                             </div>
                             <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
-                                </select>
+                                <label for="room">Rooms:</label>
+                                <div class="guest-wrapper">
+                                    <button class="guest-button btn btn-primary" id="guest-decrease">-</button>
+                                    <input type="number" class="guestInputBox "id="guest" name="room" min="1" value="1">
+                                    <button class="guest-button btn btn-primary" id="guest-increase">+</button>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Check Availability</button>
                         </form>
