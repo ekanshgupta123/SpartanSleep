@@ -93,8 +93,8 @@
         <p> {{ user_booking[0]}}</p>
       </div>
       <div class="booking-card-header-right">
-        <p>Check In: {{ user_booking[1] }}</p>
-        <p>Check Out: {{ user_booking[2] }}</p>
+        <p>Check In: {{ user_booking[1].strftime('%d %B, %Y') }}</p>
+        <p>Check Out: {{ user_booking[2].strftime('%d %B, %Y') }}</p>
       </div>
     </div>
     <div class="booking-card-body">

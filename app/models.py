@@ -25,13 +25,15 @@ class Payment(db.Model, UserMixin):
     card_number = db.Column(db.String(16), nullable=False)
     expiry_date = db.Column(db.String(10), nullable=False)
     cvv = db.Column(db.String(4), nullable=False)
-    start_date = db.Column(db.String(10), nullable=False)
-    end_date = db.Column(db.String(10), nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
     hotelName = db.Column(db.String, nullable=False)
     hotelRooms = db.Column(db.Integer, nullable=False)
     totalGuests = db.Column(db.Integer, nullable=False)
+    cityCode = db.Column(db.String, nullable=False)
+    countryCode = db.Column(db.String, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-    
+
     user = relationship("User", backref="payments")
 
 

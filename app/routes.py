@@ -10,6 +10,7 @@ from datetime import timedelta
 import pycountry
 import requests
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 #database initialization
 @spartan_app.before_request
@@ -228,8 +229,14 @@ def hotel_view(hotel_id):
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
 
+# DO NOT USE. NOT ACTIVELY IN USE FOR HOTEL-SEARCH. I THINK WE SHOULD REMOVE THIS.
 @spartan_app.route('/hotels/<cityCode>/')
 def hotel_search(cityCode):
+    # Pass all booked hotels to the template
+    booked_hotels = Payment.query.all()
+    num_booked_hotels = Payment.query.count()
+    print("Number of booked hotels:", num_booked_hotels)  # Add this line for debugging
+
     # Construct the Amadeus API URL for hotel search based on the city and country
     amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode={cityCode}&radius=15&radiusUnit=MILE&hotelSource=ALL"
 
@@ -247,7 +254,7 @@ def hotel_search(cityCode):
             hotel_data = response.json()
 
             if isinstance(hotel_data, (dict, list)):
-                return render_template('hotel-search.html', hotel_data=hotel_data)
+                return render_template('hotel-search.html', booked_hotels=booked_hotels, num_booked_hotels=num_booked_hotels, hotel_data=hotel_data)
             else:
                 return "Invalid hotel data format"
    
@@ -302,6 +309,10 @@ def hotel_searchs():
         'Authorization': f'Bearer {get_access_token()}'
     }
 
+    # Pass all booked hotels to the template
+    booked_hotels = Payment.query.all()
+    num_booked_hotels = Payment.query.count()
+
     try:
         # Send a GET request to the Amadeus API
         response = requests.get(amadeus_api_url, headers=headers)
@@ -313,9 +324,16 @@ def hotel_searchs():
             if isinstance(hotel_data, (dict, list)):
                 checkIn = request.args.get('date-in')
                 checkOut = request.args.get('date-out')
+                checkIn_datetime = datetime.strptime(checkIn, "%d %B, %Y").date()
+                checkOut_datetime = datetime.strptime(checkOut, "%d %B, %Y").date()
+
                 guests = request.args.get('guest')
                 rooms = request.args.get('room')
-                return render_template('hotel-search.html', hotel_data=hotel_data, authorized=current_user.is_authenticated, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms)
+
+                return render_template('hotel-search.html', hotel_data=hotel_data, 
+                    authorized=current_user.is_authenticated, checkIn=checkIn, checkOut=checkOut, 
+                    checkIn_datetime=checkIn_datetime, checkOut_datetime=checkOut_datetime,
+                    guests=guests, rooms=rooms, booked_hotels=booked_hotels, num_booked_hotels=num_booked_hotels)
             else:
                 return "Invalid hotel data format"
         else:
@@ -416,8 +434,12 @@ def checkout(checkout_type, hotel_id):
     if checkout_type == "pay-now":
         # Logic for Pay Now checkout
         # You can get the start_date, end_date, total_guests, and price from the URL parameters
-        start_date = request.args.get("checkIn")
-        end_date = request.args.get("checkOut")
+        start_date_str = request.args.get("checkIn")
+        end_date_str = request.args.get("checkOut")
+        # Convert dates to DATE() datetime objects
+        start_date = datetime.strptime(start_date_str, "%d %B, %Y").date()
+        end_date = datetime.strptime(end_date_str, "%d %B, %Y").date()
+
         total_guests = request.args.get("guests")
         total_rooms = request.args.get("rooms")
 
@@ -437,6 +459,8 @@ def checkout(checkout_type, hotel_id):
                 hotelName=hotel_name,
                 hotelRooms=total_rooms,
                 totalGuests=total_guests,
+                cityCode=hotel_data["iataCode"],
+                countryCode=hotel_data["address"]["countryCode"], #{{hotel_data.address.countryCode}}, {{hotel_data.iataCode }}
                 price=100  # Use the actual price obtained from the URL parameter
             )
             db.session.add(payment)
