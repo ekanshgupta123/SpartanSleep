@@ -282,7 +282,7 @@ def aboutUs():
 @spartan_app.route('/reservations')
 @login_required
 def reservations():
-    user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price).filter_by(user_id=current_user.id).all()
+    user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price, Payment.id).filter_by(user_id=current_user.id).all()
     print(len(user_bookings))
     return render_template('/reservations.html', user_bookings=user_bookings)
 
@@ -442,7 +442,7 @@ def checkout(checkout_type, hotel_id):
             db.session.add(payment)
             db.session.commit()
             flash('Payment Accepted!')
-            return redirect(url_for('confirmBooking'))
+            return redirect(url_for('reservations'))
 
         return render_template('checkout-pay-now.html', hotel_id=hotel_id, form=form)
     elif checkout_type == "pay-later":
