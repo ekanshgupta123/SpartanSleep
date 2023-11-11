@@ -1,6 +1,8 @@
 {% extends "base.html" %}
   
 {% block mycontent %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/hotel-search.css') }}" type="text/css">
+
 <div class="container">
     <h1>There are currently {{ hotel_data.meta.count }} hotels available
         in the {{ hotel_data.meta.cityCode }} area</h1>
@@ -27,6 +29,10 @@
           <div class="guests-box">
             <label>Guests</label>
             <input type="number" name="guests" placeholder="Number of guests">
+          </div>
+          <div class="hotel-availability">
+            <label>Show unavailable hotels</label>
+            <input type="checkbox" id="switch" /><labels for="switch"></labels>
           </div>
     </div>
 </div>

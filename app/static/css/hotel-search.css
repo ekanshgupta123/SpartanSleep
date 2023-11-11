@@ -1,0 +1,48 @@
+input[type=checkbox]{
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+labels {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 85px;
+	height: 40px;
+	background: grey;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+
+labels:after {
+	content: '';
+	position: absolute;
+	top: 4px;
+	left: 5px;
+	width: 30px;
+	height: 30px;
+	background: blue;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+
+input:checked + labels {
+	background: #bada55;
+}
+
+input:checked + labels:after {
+	left: calc(100% - 5px);
+	transform: translateX(-100%);
+}
+
+label:active:after {
+	width: 130px;
+}
+
+// centering
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
