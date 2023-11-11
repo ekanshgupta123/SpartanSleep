@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+<div>
+    <h2>Change Reservation Date</h2>
+    <p>Current Check-in Date: {{ checkIn }}</p>
+    <p>Current Check-out Date: {{ checkOut }}</p>
+    <form method="post" action="">
+        <label for="new_check_in_date">New Check-in Date:</label>
+        <input type="date" id="new_check_in_date" name="new_check_in_date" required>
+        <br>
+        <label for="new_check_out_date">New Check-out Date:</label>
+        <input type="date" id="new_check_out_date" name="new_check_out_date" required>
+        <br>
+        <button type="submit">Update Date</button>
+    </form>
+</div>
+{% endblock %}
