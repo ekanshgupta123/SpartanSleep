@@ -4,12 +4,18 @@ input[type=checkbox]{
 	visibility: hidden;
 }
 
+.label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
 labels {
 	cursor: pointer;
 	text-indent: -9999px;
 	width: 85px;
 	height: 40px;
-	background: grey;
+	background: white;
 	display: block;
 	border-radius: 100px;
 	position: relative;
@@ -22,7 +28,7 @@ labels:after {
 	left: 5px;
 	width: 30px;
 	height: 30px;
-	background: blue;
+	background: gray;
 	border-radius: 90px;
 	transition: 0.3s;
 }
@@ -36,7 +42,7 @@ input:checked + labels:after {
 	transform: translateX(-100%);
 }
 
-label:active:after {
+labels:active:after {
 	width: 130px;
 }
 
@@ -46,3 +52,18 @@ body {
 	justify-content: center;
 	align-items: center;
 }
+
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.top-container {
+    background-color: #222736;
+}
+
+.booking-form {
+    background: #3A7BD5;
+    padding: 44px 40px 50px 40px;
+    border-radius: 20px;
+  }
