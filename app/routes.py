@@ -10,6 +10,8 @@ from datetime import timedelta
 import pycountry
 import requests
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+import time
 
 #database initialization
 @spartan_app.before_request
@@ -285,6 +287,38 @@ def reservations():
     user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price, Payment.id).filter_by(user_id=current_user.id).all()
     print(len(user_bookings))
     return render_template('/reservations.html', user_bookings=user_bookings)
+
+# edit reservations date
+@spartan_app.route('/update_reservation_date/<int:reservation_id>', methods=['GET', 'POST'])
+@login_required
+def update_reservation_date(reservation_id):
+    reservation = Payment.query.get(reservation_id)
+    checkIn = reservation.start_date
+    checkOut = reservation.end_date
+
+    print(f"checkIn: {checkIn}, checkOut: {checkOut}")
+    
+    if request.method == 'POST':
+        new_start_date = request.form.get('new_check_in_date')
+        new_end_date = request.form.get('new_check_out_date')  
+
+        if new_start_date is not None and new_end_date is not None:
+            try:
+                reservation.start_date = datetime.strptime(new_start_date, '%Y-%m-%d').date()
+                reservation.end_date = datetime.strptime(new_end_date, '%Y-%m-%d').date()
+
+                db.session.commit()
+                flash('Updated Successfully!')
+            except ValueError:
+                flash('Invalid date format received from the form')
+                return redirect(url_for('update_reservation_date', reservation_id=reservation_id))
+        else:
+            flash('Dates are missing in the form')
+            return redirect(url_for('update_reservation_date', reservation_id=reservation_id))
+        
+        return redirect(url_for('reservations'))
+
+    return render_template('update_reservation_date.html', checkIn = checkIn, checkOut = checkOut)
 
 # hotel-search path
 @spartan_app.route('/hotel-search')
