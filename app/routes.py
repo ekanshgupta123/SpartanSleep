@@ -203,13 +203,14 @@ def hotel_view(hotel_id):
             checkOut = request.args.get('checkOut')
             guests = request.args.get('guests')
             rooms = request.args.get('rooms')
+            price = request.args.get('price')
 
             print(f"checkIn: {checkIn}, checkOut: {checkOut}, guests: {guests}, rooms: {rooms}")
 
             if isinstance(hotel_data, (dict, list)):
                 hotel_data = hotel_data["data"][0]
                 print("Hotel Name:", hotel_data['name'])
-                return render_template('hotel-view.html', hotel_data=hotel_data, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms)
+                return render_template('hotel-view.html', hotel_data=hotel_data, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms, price=price)
             else:
                 return "Invalid hotel data format"
         else:
@@ -443,8 +444,9 @@ def checkout(checkout_type, hotel_id):
 
         total_guests = request.args.get("guests")
         total_rooms = request.args.get("rooms")
+        price = request.args.get("price")
 
-        print(f"checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}")
+        print(f"Pay now checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}, price: {price}")
         form = PaymentForm()
         if form.validate_on_submit():
             payment = Payment(
@@ -462,7 +464,7 @@ def checkout(checkout_type, hotel_id):
                 totalGuests=total_guests,
                 cityCode=hotel_data["iataCode"],
                 countryCode=hotel_data["address"]["countryCode"], #{{hotel_data.address.countryCode}}, {{hotel_data.iataCode }}
-                price=100  # Use the actual price obtained from the URL parameter
+                price=int(price)  # Convert price to integer
             )
             db.session.add(payment)
             db.session.commit()

@@ -89,14 +89,14 @@
                     {% endfor %}
                     <!-- If available display hotel card -->
                     {% if ns_availability.is_available %}
-                        <a href="/hotel-view/{{ hotel.hotelId }}">
-                        <a href="/hotel-view/{{ hotel.hotelId }}?checkIn={{ checkIn }}&checkOut={{ checkOut }}&guests={{ guests }}&rooms={{ rooms }}">
-                            <div class="hotel-card">
+                    <a href="#" onclick="redirectToHotelView('{{ hotel.hotelId }}')">
+                        <div class="hotel-card" data-hotel-id="{{ hotel.hotelId }}" data-random-price="">
                                 <div class="hotel-card-image"></div>
                                 <div class="hotel-card-details">
                                 <h3 class="hotel-card-name">{{ hotel.name }}</h3>
                                 <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
                                 <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+                                <p class="hotel-card-price"></p>
                                 </div>
                             </div>
                         </a>
@@ -212,31 +212,26 @@ function generateRandomPrice() {
             priceElement.classList.add('hotel-card-price');
             priceElement.textContent = 'Price: $' + randomPrice;
 
+            // Store the random price as a data attribute
+            card.dataset.randomPrice = randomPrice;
+
             card.querySelector('.hotel-card-details').appendChild(priceElement);
         });
     });
-</script>
 
-<!--<div class="hotel-card">
-  <div class="hotel-card-image"></div>
-  <div class="hotel-card-details">
-    <h3 class="hotel-card-name">Sonesta Select San Jose Airport</h3>
-    <p class="hotel-card-location">San Jose, CA</p>
-    <p class="hotel-card-price">$122</p>
-    <button class="hotel-card-book-now-button">Book Now</button>
-  </div>
-</div>-->
-<!--<div class="hotel-grid">
-    {% for hotel in hotels %}
-        <div class="hotel-card">
-            <img src="{{ hotel.image_url }}" alt="{{ hotel.name }}" />
-            <h2>{{ hotel.name }}</h2>
-            <p>Rating: {{ hotel.rating }}</p>
-            <p>Location: {{ hotel.location }}</p>
-            <p>Price: ${{ hotel.price }}</p>
-        </div>
-    {% endfor %}
-</div>-->
+    // Function to handle the click event and redirect to the hotel view
+    function redirectToHotelView(hotelId) {
+        // Get the random price for the clicked hotel
+        var randomPrice = document.querySelector('.hotel-card[data-hotel-id="' + hotelId + '"]').dataset.randomPrice;
+
+        // Build the URL with the generated price
+        var url = "/hotel-view/" + hotelId +
+            "?checkIn={{ checkIn }}&checkOut={{ checkOut }}&guests={{ guests }}&rooms={{ rooms }}&price=" + randomPrice;
+
+        // Redirect to the hotel view page
+        window.location.href = url;
+    }
+</script>
 
 <!-- Footer Section Begin -->
 <footer class="footer-section">
