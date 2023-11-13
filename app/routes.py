@@ -3,8 +3,10 @@ from flask import render_template, redirect, flash, request, url_for, session, j
 from app.forms import SignupForm, SearchForm
 from app.forms import LoginForm
 from app.forms import PaymentForm
+from app.forms import RewardsForm
 from app.models import User
 from app.models import Payment
+from app.models import Rewards
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import timedelta
 import pycountry
@@ -408,7 +410,13 @@ def hotel_book():
     except Exception as e:
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
-
+#display current user rewards
+def get_reward_points(user_id):
+    user = User.query.get(user_id)
+    if user:
+        return user.reward_points
+    return None
+#calculate rewards
 
 @spartan_app.route('/checkout/<string:checkout_type>/<string:hotel_id>', methods=['GET', 'POST'])
 @login_required
@@ -448,6 +456,8 @@ def checkout(checkout_type, hotel_id):
         return "An error occurred" 
 
     if checkout_type == "pay-now":
+        user_id = current_user.id
+        reward_points = get_reward_points(user_id)
         # Logic for Pay Now checkout
         # You can get the start_date, end_date, total_guests, and price from the URL parameters
         start_date = request.args.get("checkIn")
@@ -476,14 +486,54 @@ def checkout(checkout_type, hotel_id):
             db.session.add(payment)
             db.session.commit()
             flash('Payment Accepted!')
+
+            current_user.reward_points = (int(reward_points)+100)
+            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
+            db.session.add(add_rewards)
+            db.session.commit()
+
+            flash('Rewards Redeemed Successfully'.format(reward_points))
             return redirect(url_for('reservations'))
 
         return render_template('checkout-pay-now.html', hotel_id=hotel_id, form=form)
+    # using pay-later for rewards
     elif checkout_type == "pay-later":
-        # Logic for Pay Later checkout
-        # Implement the logic for Pay Later checkout here
+        user_id = current_user.id
+        reward_points = get_reward_points(user_id)
 
-        return render_template('checkout-pay-later.html', hotel_id=hotel_id)  # Modify as needed
+        start_date = request.args.get("checkIn")
+        end_date = request.args.get("checkOut")
+        total_guests = request.args.get("guests")
+        total_rooms = request.args.get("rooms")
+        print(f"checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}")
+
+        rewards_form = RewardsForm()
+        if rewards_form.validate_on_submit():
+            payment = Payment(
+                user_id=current_user.id,
+                name=rewards_form.name.data,
+                email=rewards_form.email.data,
+                phone=rewards_form.phone.data,
+                start_date=start_date,
+                end_date=end_date,
+                hotelName=hotel_name,
+                hotelRooms=total_rooms,
+                totalGuests=total_guests,
+                price=100  # Use the actual price obtained from the URL parameter
+            )
+            db.session.add(payment)
+            db.session.commit()
+
+            current_user.reward_points = (int(reward_points)-100)
+            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
+            db.session.add(add_rewards)
+            db.session.commit()
+
+            flash('Rewards Redeemed Successfully'.format(reward_points))
+            return redirect(url_for('reservations'))
+
+        return render_template('checkout-pay-later.html', hotel_id=hotel_id,rewards_form=RewardsForm(),reward_points=reward_points)  # Modify as needed
+
     else:
         # Handle invalid checkout_type
         return "Invalid checkout type"
