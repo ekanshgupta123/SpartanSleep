@@ -1,0 +1,120 @@
+input[type=checkbox]{
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+.label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+labels {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 85px;
+	height: 40px;
+	background: white;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+
+labels:after {
+	content: '';
+	position: absolute;
+	top: 4px;
+	left: 5px;
+	width: 30px;
+	height: 30px;
+	background: gray;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+
+input:checked + labels {
+	background: #bada55;
+}
+
+input:checked + labels:after {
+	left: calc(100% - 5px);
+	transform: translateX(-100%);
+}
+
+labels:active:after {
+	width: 130px;
+}
+
+// centering
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.top-container {
+    background-color: #222736;
+}
+
+.booking-form {
+    background: #3a7bd5c2;
+    padding: 44px 40px 50px 40px;
+    border-radius: 20px;
+  }
+
+  .booking-form h3 {
+	color: #e8ebef;
+	margin-bottom: 36px;
+  }
+
+  .booking-form form .city-option label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .booking-form form .check-date label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .booking-form form .select-option label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .filter-form {
+	background: #e8ecf5;
+    padding: 44px 40px 50px 40px;
+    border-radius: 20px;
+	margin-top: 15px;
+  }
+
+  .filter-form h3 {
+	color: #333333;
+	font-size: 36px;
+  }
+
+  .filter-form form .select-option label {
+	font-size: 16px;
+	color: #333333;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .btn-primary {
+	color: #333333;
+	background-color: #F2F6FF;
+	border-color: #949494;
+  }

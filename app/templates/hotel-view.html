@@ -7,11 +7,11 @@
     <input type="hidden" id="anPageName" name="page" value="reservation" />
     <div class="reservation screen">
       <div class="pricing-2qMuan">
-        <div class="x228-fJQx2o">$228</div>
+        <div class="x228-fJQx2o">${{ price }}</div>
         <div class="starts-from-fJQx2o">Starts from:</div>
       </div>
       <div class="hotel-name-2qMuan">
-        <div class="san-jose-FEhXH1">{{hotel_data.address.countryCode}}</div>
+        <div class="san-jose-FEhXH1">{{hotel_data.address.countryCode}}, {{hotel_data.iataCode }}</div>
         <h1 class="title-FEhXH1">{{hotel_data.name}}</h1>
       </div>
       <div class="number-of-rooms-2qMuan">
@@ -117,7 +117,7 @@
         src="{{ url_for('static',filename='img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg') }}" alt="url" />
       </div>
     </div>
-    <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel_data.hotelId }}" data-check-in="{{ checkIn }}" data-check-out="{{ checkOut }}" data-guests="{{ guests }}" data-rooms="{{ rooms }}">Book Now</button>
+    <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel_data.hotelId }}" data-check-in="{{ checkIn }}" data-check-out="{{ checkOut }}" data-guests="{{ guests }}" data-rooms="{{ rooms }}" data-price="{{ price }}">Book Now</button>
     <div class="book-now-modal">
         <div class="modal-content">
             <span id="closeModalBtn" class="close">&times;</span>
@@ -166,6 +166,7 @@
             var checkOut = this.dataset.checkOut;
             var guests = this.dataset.guests;
             var rooms = this.dataset.rooms;
+            var price = this.dataset.price;
 
             var payNowBtn = document.getElementById('payNowBtn');
             payNowBtn.dataset.hotelId = hotelId;
@@ -173,12 +174,14 @@
             payNowBtn.dataset.checkOut = checkOut;
             payNowBtn.dataset.guests = guests;
             payNowBtn.dataset.rooms = rooms;
+            payNowBtn.dataset.price = price;
             // Debugging
             console.log('Line 179: checkIn:', checkIn);
             console.log('checkOut:', checkOut);
             console.log('guests:', guests);
             console.log('rooms:', rooms);
             console.log('hotelId:', hotelId);
+            console.log('price:', price);
 
             var payLaterBtn = document.getElementById('payLaterBtn');
             payLaterBtn.dataset.hotelId = hotelId;
@@ -186,6 +189,7 @@
             payLaterBtn.dataset.checkOut = checkOut;
             payLaterBtn.dataset.guests = guests;
             payLaterBtn.dataset.rooms = rooms;
+            payLaterBtn.dataset.price = price;
             
             // Debugging
             console.log('Line 193: checkIn:', checkIn);
@@ -193,6 +197,7 @@
             console.log('guests:', guests);
             console.log('rooms:', rooms);
             console.log('hotelId:', hotelId);
+            console.log('price:', price);
             openModal();
         });
     });
@@ -214,6 +219,7 @@
         var checkOut = document.getElementById('payNowBtn').dataset.checkOut;
         var guests = document.getElementById('payNowBtn').dataset.guests;
         var rooms = document.getElementById('payNowBtn').dataset.rooms;
+        var price = document.getElementById('payNowBtn').dataset.price;
 
         // Debugging
         console.log('Line 221: goToCheckout: checkIn:', checkIn);
@@ -221,11 +227,12 @@
         console.log('guests:', guests);
         console.log('rooms:', rooms);
         console.log('hotelId:', hotelId);
+        console.log('price:', price);
 
         if (hotelId) {
             var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId +
                 '?checkIn=' + checkIn + '&checkOut=' + checkOut + 
-                '&guests=' + guests + '&rooms=' + rooms;
+                '&guests=' + guests + '&rooms=' + rooms + '&price=' + price;
             window.location.href = checkoutUrl;
         } else {
             console.error('Hotel ID is not set');

@@ -3091,25 +3091,12 @@ h1 {
 /* ---------------------
  Hotel Search Page
 -----------------------*/
-.search-container {
-	display: flex;
-}
-.location-box {
-	flex-grow: 1;
-}
-.check-in-out-box {
-	flex-grow: 1;
-}
-.guests-box {
-	flex-grow: 1;
-}
-
 .hotel-card {
-	display: flex;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  max-width: 50%;
+  max-width: 100%;
   max-height: 250px;
   margin: 10px auto;
   padding: 10px;
