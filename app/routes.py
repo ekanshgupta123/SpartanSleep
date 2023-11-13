@@ -3,8 +3,10 @@ from flask import render_template, redirect, flash, request, url_for, session, j
 from app.forms import SignupForm, SearchForm
 from app.forms import LoginForm
 from app.forms import PaymentForm
+from app.forms import RewardsForm
 from app.models import User
 from app.models import Payment
+from app.models import Rewards
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import timedelta
 import pycountry
@@ -12,6 +14,7 @@ import requests
 import random
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import time
 
 #database initialization
 @spartan_app.before_request
@@ -291,9 +294,41 @@ def aboutUs():
 @spartan_app.route('/reservations')
 @login_required
 def reservations():
-    user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price).filter_by(user_id=current_user.id).all()
-    # print(len(user_bookings))
+    user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price, Payment.id).filter_by(user_id=current_user.id).all()
+    print(len(user_bookings))
     return render_template('/reservations.html', user_bookings=user_bookings)
+
+# edit reservations date
+@spartan_app.route('/update_reservation_date/<int:reservation_id>', methods=['GET', 'POST'])
+@login_required
+def update_reservation_date(reservation_id):
+    reservation = Payment.query.get(reservation_id)
+    checkIn = reservation.start_date
+    checkOut = reservation.end_date
+
+    print(f"checkIn: {checkIn}, checkOut: {checkOut}")
+    
+    if request.method == 'POST':
+        new_start_date = request.form.get('new_check_in_date')
+        new_end_date = request.form.get('new_check_out_date')  
+
+        if new_start_date is not None and new_end_date is not None:
+            try:
+                reservation.start_date = datetime.strptime(new_start_date, '%Y-%m-%d').date()
+                reservation.end_date = datetime.strptime(new_end_date, '%Y-%m-%d').date()
+
+                db.session.commit()
+                flash('Updated Successfully!')
+            except ValueError:
+                flash('Invalid date format received from the form')
+                return redirect(url_for('update_reservation_date', reservation_id=reservation_id))
+        else:
+            flash('Dates are missing in the form')
+            return redirect(url_for('update_reservation_date', reservation_id=reservation_id))
+        
+        return redirect(url_for('reservations'))
+
+    return render_template('update_reservation_date.html', checkIn = checkIn, checkOut = checkOut)
 
 # hotel-search path
 @spartan_app.route('/hotel-search')
@@ -394,7 +429,13 @@ def hotel_book():
     except Exception as e:
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
-
+#display current user rewards
+def get_reward_points(user_id):
+    user = User.query.get(user_id)
+    if user:
+        return user.reward_points
+    return None
+#calculate rewards
 
 @spartan_app.route('/checkout/<string:checkout_type>/<string:hotel_id>', methods=['GET', 'POST'])
 @login_required
@@ -434,6 +475,8 @@ def checkout(checkout_type, hotel_id):
         return "An error occurred" 
 
     if checkout_type == "pay-now":
+        user_id = current_user.id
+        reward_points = get_reward_points(user_id)
         # Logic for Pay Now checkout
         # You can get the start_date, end_date, total_guests, and price from the URL parameters
         start_date_str = request.args.get("checkIn")
@@ -469,14 +512,54 @@ def checkout(checkout_type, hotel_id):
             db.session.add(payment)
             db.session.commit()
             flash('Payment Accepted!')
-            return redirect(url_for('confirmBooking'))
+
+            current_user.reward_points = (int(reward_points)+100)
+            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
+            db.session.add(add_rewards)
+            db.session.commit()
+
+            flash('Rewards Redeemed Successfully'.format(reward_points))
+            return redirect(url_for('reservations'))
 
         return render_template('checkout-pay-now.html', hotel_id=hotel_id, form=form)
+    # using pay-later for rewards
     elif checkout_type == "pay-later":
-        # Logic for Pay Later checkout
-        # Implement the logic for Pay Later checkout here
+        user_id = current_user.id
+        reward_points = get_reward_points(user_id)
 
-        return render_template('checkout-pay-later.html', hotel_id=hotel_id)  # Modify as needed
+        start_date = request.args.get("checkIn")
+        end_date = request.args.get("checkOut")
+        total_guests = request.args.get("guests")
+        total_rooms = request.args.get("rooms")
+        print(f"checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}")
+
+        rewards_form = RewardsForm()
+        if rewards_form.validate_on_submit():
+            payment = Payment(
+                user_id=current_user.id,
+                name=rewards_form.name.data,
+                email=rewards_form.email.data,
+                phone=rewards_form.phone.data,
+                start_date=start_date,
+                end_date=end_date,
+                hotelName=hotel_name,
+                hotelRooms=total_rooms,
+                totalGuests=total_guests,
+                price=100  # Use the actual price obtained from the URL parameter
+            )
+            db.session.add(payment)
+            db.session.commit()
+
+            current_user.reward_points = (int(reward_points)-100)
+            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
+            db.session.add(add_rewards)
+            db.session.commit()
+
+            flash('Rewards Redeemed Successfully'.format(reward_points))
+            return redirect(url_for('reservations'))
+
+        return render_template('checkout-pay-later.html', hotel_id=hotel_id,rewards_form=RewardsForm(),reward_points=reward_points)  # Modify as needed
+
     else:
         # Handle invalid checkout_type
         return "Invalid checkout type"
@@ -553,3 +636,18 @@ def checkoutPayLater(hotel_id):
 def confirmBooking():
     # Logic for Pay Later checkout
     return render_template('confirm-booking.html')
+
+
+@spartan_app.route('/delete-reservation/<int:payment_id>', methods=['POST'])
+def delete_reservation(payment_id):
+    payment = Payment.query.get_or_404(payment_id)
+    if payment.user_id != current_user.id:
+        # Prevent deletion if the current user does not own the reservation
+        return jsonify({'error': 'Unauthorized to delete this reservation'}), 401
+
+    try:
+        db.session.delete(payment)
+        db.session.commit()
+        return redirect(url_for('reservations'))
+    except Exception as e:
+        return jsonify({'error': 'There was a problem deleting the reservation: ' + str(e)}), 500

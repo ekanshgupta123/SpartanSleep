@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 
 {% block mycontent %}
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
     <!-- Welcome Card -->
     <div class="welcome-card">
@@ -108,7 +120,20 @@
       </div>
     </div>
     <div class="booking-card-footer">
-      <button>Cancel Booking</button>
+
+      <form action="{{ url_for('update_reservation_date', reservation_id = user_booking[6] ) }}" method="post">
+        <input type="hidden" name="booking_id" value="{{ user_booking[6] }}"/>
+        <button type="submit" class="btn btn-primary">Edit Date</button>
+      </form>
+    </div>
+    <div class="booking-card-footer">
+
+      <form action="{{ url_for('delete_reservation', payment_id = user_booking[6] ) }}" method="post">
+        <input type="hidden" name="booking_id" value="{{ user_booking[6] }}"/>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Warning: You will be charged $50 for a Cancelation Fee \nAre you sure you want to continue?');">Cancel Booking</button>
+      </form>
+    </div>
+  
     </div>
   </div>
 {% endfor %}  
