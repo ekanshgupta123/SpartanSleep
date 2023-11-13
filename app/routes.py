@@ -294,7 +294,7 @@ def aboutUs():
 @spartan_app.route('/reservations')
 @login_required
 def reservations():
-    user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price, Payment.id).filter_by(user_id=current_user.id).all()
+    user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price, Payment.id, Payment.cityCode, Payment.countryCode,).filter_by(user_id=current_user.id).all()
     print(len(user_bookings))
     return render_template('/reservations.html', user_bookings=user_bookings)
 
@@ -527,11 +527,17 @@ def checkout(checkout_type, hotel_id):
         user_id = current_user.id
         reward_points = get_reward_points(user_id)
 
-        start_date = request.args.get("checkIn")
-        end_date = request.args.get("checkOut")
+        start_date_str = request.args.get("checkIn")
+        end_date_str = request.args.get("checkOut")
+        # Convert dates to DATE() datetime objects
+        start_date = datetime.strptime(start_date_str, "%d %B, %Y").date()
+        end_date = datetime.strptime(end_date_str, "%d %B, %Y").date()
+
         total_guests = request.args.get("guests")
         total_rooms = request.args.get("rooms")
-        print(f"checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}")
+        price = request.args.get("price")
+
+        print(f"pay later checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}, price: {price}")
 
         rewards_form = RewardsForm()
         if rewards_form.validate_on_submit():
@@ -545,7 +551,9 @@ def checkout(checkout_type, hotel_id):
                 hotelName=hotel_name,
                 hotelRooms=total_rooms,
                 totalGuests=total_guests,
-                price=100  # Use the actual price obtained from the URL parameter
+                cityCode=hotel_data["iataCode"],
+                countryCode=hotel_data["address"]["countryCode"],
+                price=int(price)  # Use the actual price obtained from the URL parameter
             )
             db.session.add(payment)
             db.session.commit()
