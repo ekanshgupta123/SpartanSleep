@@ -44,3 +44,9 @@ class PaymentForm(FlaskForm):
     expiry_date = StringField('Expiry Date', validators=[DataRequired(), Length(max=10)])
     cvv = StringField('CVV', validators=[DataRequired(), Length(max=4)])
     submit = SubmitField('Submit Payment')
+
+class RewardsForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=255)])
+    email = StringField('Email', validators=[DataRequired(), Length(max=255)])
+    phone = StringField('Phone Number', validators=[DataRequired(), Length(max=20)])
+    submit = SubmitField('Pay Using Rewards')
