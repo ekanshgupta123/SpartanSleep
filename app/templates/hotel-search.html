@@ -3,110 +3,138 @@
 {% block mycontent %}
 <link rel="stylesheet" href="{{ url_for('static',filename='css/hotel-search.css') }}" type="text/css">
 <div class="row">
+    <div class="col-lg-3 align-self-start">
+        <div style="width: 95%;" class="booking-form">
+                <h3>Booking Your Hotel</h3>
+                <form action="/hotel-search" method="GET">
+                    <!-- City search -->
+                    <div class="city-option">
+                        <label for="cityCode">Enter a city code:</label>
+                        <input type="text" class="city-code" id="search-input" name="cityCode" placeholder="">
+                    </div>
+                    <div class="check-date">
+                        <label for="date-in">Check In:</label>
+                        <input type="text" class="date-input" id="date-in" name="date-in" placeholder="{{ checkIn }}">
+                        <i class="icon_calendar"></i>
+                    </div>
+                    <div class="check-date">
+                        <label for="date-out">Check Out:</label>
+                        <input type="text" class="date-input" id="date-out" name="date-out" placeholder="{{ checkOut }}">
+                        <i class="icon_calendar"></i>
+                    </div>
+                    <div class="select-option">
+                        <label for="guest">Guests:</label>
+                            <select class="guestInputBox" id="guest" name="guest" placeholder="{{ guests }}">
+                                {% for i in range(1, 10) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="select-option">
+                        <label for="room">Rooms:</label>
+                            <select class="guestInputBox" id="room" name="room" placeholder="{{ rooms }}">
+                                {% for i in range(1, 10) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>            
+                    <button type="submit" class="btn btn-primary">Check Availability</button>
+                </form>
+        </div>
+        <div style="width: 95%;" class="filter-form">
+            <h3>Filter By: </h3>
+            <form action="/hotel-search" method="GET">
+                <!-- City search -->
+                <div class="select-option">
+                    <label for="guest">Distance:</label>
+                        <select class="guestInputBox" id="guest" name="distance">
+                            {% for i in range(1, 15) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                </div>           
+                <button type="submit" class="btn btn-primary">Add filter</button>
+            </form>
+            <form action="/hotel-search" method="GET">
+                <!-- City search -->
+                <div class="select-option">
+                    <label for="guest">Price:</label>
+                        <select class="guestInputBox" id="guest" name="distance">
+                            {% for i in range(1, 15) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                </div>           
+                <button type="submit" class="btn btn-primary">Add filter</button>
+            </form>
+        </div>
+    </div>
     <div class="col-lg-5">
-        <div class="hotel-cards">
-            {% set ns = namespace(hotels_not_available = 0) %}
-            {% set ns_availability = namespace(is_available = True) %}
-            {% for hotel in hotel_data.data %}
-                <!-- Loop through all bookings -->
-                {% for booking in booked_hotels %}
-                    {% if hotel.name == booking.hotelName %}
-                        {% set booking_checkIn = booking.start_date %}
-                        {% set booking_checkOut = booking.end_date %}
-                        <!-- Check if hotel is available during inputted time --> 
-                        {% if booking_checkIn <= checkOut_datetime or booking_checkOut >= checkIn_datetime %}
-                            {% set ns_availability.is_available = False %}
-                            {% set ns.hotels_not_available = ns.hotels_not_available + 1 %}
-                            <p>{{ hotel.name }} is currently unavailable for your desired booking period.</p>
+            <div class="hotel-cards">
+                {% set ns = namespace(hotels_not_available = 0) %}
+                {% set ns_availability = namespace(is_available = True) %}
+                {% for hotel in hotel_data.data %}
+                    <!-- Loop through all bookings -->
+                    {% for booking in booked_hotels %}
+                        {% if hotel.name == booking.hotelName %}
+                            {% set booking_checkIn = booking.start_date %}
+                            {% set booking_checkOut = booking.end_date %}
+                            <!-- Check if hotel is available during inputted time --> 
+                            {% if booking_checkIn <= checkOut_datetime or booking_checkOut >= checkIn_datetime %}
+                                {% set ns_availability.is_available = False %}
+                                {% set ns.hotels_not_available = ns.hotels_not_available + 1 %}
+                                <p>{{ hotel.name }} is currently unavailable for your desired booking period.</p>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                {% endfor %}
-                <!-- If available display hotel card -->
-                {% if ns_availability.is_available %}
-                    <a href="/hotel-view/{{ hotel.hotelId }}">
-                    <a href="/hotel-view/{{ hotel.hotelId }}?checkIn={{ checkIn }}&checkOut={{ checkOut }}&guests={{ guests }}&rooms={{ rooms }}">
-                        <div class="hotel-card">
-                            <div class="hotel-card-image"></div>
-                            <div class="hotel-card-details">
-                            <h3 class="hotel-card-name">{{ hotel.name }}</h3>
-                            <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
-                            <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+                    {% endfor %}
+                    <!-- If available display hotel card -->
+                    {% if ns_availability.is_available %}
+                        <a href="/hotel-view/{{ hotel.hotelId }}">
+                        <a href="/hotel-view/{{ hotel.hotelId }}?checkIn={{ checkIn }}&checkOut={{ checkOut }}&guests={{ guests }}&rooms={{ rooms }}">
+                            <div class="hotel-card">
+                                <div class="hotel-card-image"></div>
+                                <div class="hotel-card-details">
+                                <h3 class="hotel-card-name">{{ hotel.name }}</h3>
+                                <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
+                                <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                {% endif %}
-                {% set ns_availability.is_available = True %}
-            {% endfor %}
-            <p>Hotels not available: {{ ns.hotels_not_available }}</p>
-            <div class="book-now-modal">
-                <div class="modal-content">
-                    <span id="closeModalBtn" class="close">&times;</span>
-                    <h5>Your payment options:</h5>
-                    <div class="modal-options">
-                        <div>
-                            <h6>Pay Now</h6>
-                            <ul>
-                                <li>We will process your payment in your local currency</li>
-                                <li>More ways to pay: use Debit/Credit card</li>
-                            </ul>
-                            <button id="payNowBtn" onclick="goToCheckout(this)">Pay Now</button>
-                        </div>
-                        <div>
-                            <h6>Pay when you stay</h6>
-                            <ul>
-                                <li>You will not be charged until your stay</li>
-                                <li> Pay the property directly in their preferred currency</li>
-                            </ul>
-                            <button id="payLaterBtn" onclick="goToCheckout(this)">Pay when you stay</button>
+                        </a>
+                    {% endif %}
+                    {% set ns_availability.is_available = True %}
+                {% endfor %}
+                <p>Hotels not available: {{ ns.hotels_not_available }}</p>
+                <div class="book-now-modal">
+                    <div class="modal-content">
+                        <span id="closeModalBtn" class="close">&times;</span>
+                        <h5>Your payment options:</h5>
+                        <div class="modal-options">
+                            <div>
+                                <h6>Pay Now</h6>
+                                <ul>
+                                    <li>We will process your payment in your local currency</li>
+                                    <li>More ways to pay: use Debit/Credit card</li>
+                                </ul>
+                                <button id="payNowBtn" onclick="goToCheckout(this)">Pay Now</button>
+                            </div>
+                            <div>
+                                <h6>Pay when you stay</h6>
+                                <ul>
+                                    <li>You will not be charged until your stay</li>
+                                    <li> Pay the property directly in their preferred currency</li>
+                                </ul>
+                                <button id="payLaterBtn" onclick="goToCheckout(this)">Pay when you stay</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="col-lg-3 align-self-start">
-        <div class="booking-form">
-            <h3>Booking Your Hotel</h3>
-            <form action="/hotel-search" method="GET">
-                <!-- City search -->
-                <div class="city-option">
-                    <label for="cityCode">Enter a city code:</label>
-                    <input type="text" class="city-code" id="search-input" name="cityCode" placeholder="">
-                </div>
-                <div class="check-date">
-                    <label for="date-in">Check In:</label>
-                    <input type="text" class="date-input" id="date-in" name="date-in">
-                    <i class="icon_calendar"></i>
-                </div>
-                <div class="check-date">
-                    <label for="date-out">Check Out:</label>
-                    <input type="text" class="date-input" id="date-out" name="date-out">
-                    <i class="icon_calendar"></i>
-                </div>
-                <div class="select-option">
-                    <label for="guest" class="my-label">Guests:</label>
-                        <select class="guestInputBox" id="guest" name="guest">
-                            {% for i in range(1, 10) %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                </div>
-                <div class="select-option">
-                    <label for="room">Rooms:</label>
-                        <select class="guestInputBox" id="room" name="room">
-                            {% for i in range(1, 10) %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                </div>            
-                <button type="submit" class="btn btn-primary">Check Availability</button>
-            </form>
-        </div>
     </div>
 </div>
+
 <div class="top-container">
     <h1>There are currently {{ hotel_data.meta.count }} hotels available
-        in the {{ hotel_data.meta.cityCode }} area</h1>
+        in the {{ hotel_data.meta.iata }} area</h1>
     <!-- Debugging -->
     <p>Number of booked hotels: {{ num_booked_hotels }}</p>
     <p>Check In: {{ checkIn }}</p>
@@ -146,7 +174,6 @@
     });
 });
 
-
     // Close the modal when the close button is clicked
     closeModalBtn.addEventListener('click', closeModal);
 
@@ -168,7 +195,26 @@ function goToCheckout(checkoutType) {
     }
 }
 
+function generateRandomPrice() {
+        return Math.floor(Math.random() * (280 - 130 + 1) / 15) * 15 + 130;
+    }
 
+    // Loop through hotel cards and set random prices
+    document.addEventListener("DOMContentLoaded", function () {
+        var hotelCards = document.querySelectorAll('.hotel-card');
+
+        hotelCards.forEach(function (card) {
+            // Generate random price
+            var randomPrice = generateRandomPrice();
+
+            // Add the price to the card
+            var priceElement = document.createElement('p');
+            priceElement.classList.add('hotel-card-price');
+            priceElement.textContent = 'Price: $' + randomPrice;
+
+            card.querySelector('.hotel-card-details').appendChild(priceElement);
+        });
+    });
 </script>
 
 <!--<div class="hotel-card">

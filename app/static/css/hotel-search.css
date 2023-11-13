@@ -63,7 +63,58 @@ label {
 }
 
 .booking-form {
-    background: #3A7BD5;
+    background: #3a7bd5c2;
     padding: 44px 40px 50px 40px;
     border-radius: 20px;
+  }
+
+  .booking-form h3 {
+	color: #e8ebef;
+	margin-bottom: 36px;
+  }
+
+  .booking-form form .city-option label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .booking-form form .check-date label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .booking-form form .select-option label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .filter-form {
+	background: #e8ecf5;
+    padding: 44px 40px 50px 40px;
+    border-radius: 20px;
+	margin-top: 15px;
+  }
+
+  .filter-form h3 {
+	color: #333333;
+	font-size: 36px;
+  }
+
+  .filter-form form .select-option label {
+	font-size: 16px;
+	color: #333333;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .btn-primary {
+	color: #333333;
+	background-color: #F2F6FF;
+	border-color: #949494;
   }
