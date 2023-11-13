@@ -126,13 +126,12 @@
       </form>
     </div>
     <div class="booking-card-footer">
-
-      <form action="{{ url_for('delete_reservation', payment_id = user_booking[6] ) }}" method="post">
-        <input type="hidden" name="booking_id" value="{{ user_booking[6] }}"/>
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Warning: You will be charged $50 for a Cancelation Fee \nAre you sure you want to continue?');">Cancel Booking</button>
-      </form>
-    </div>
-  
+      <div class="booking-card-footer">
+        <form action="{{ url_for('delete_reservation', payment_id = user_booking[6] ) }}" method="post">
+          <input type="hidden" name="booking_id" value="{{ user_booking[6] }}"/>
+          <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel Booking</button>
+        </form>
+      </div>  
     </div>
   </div>
 {% endfor %}  
