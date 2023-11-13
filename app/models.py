@@ -39,6 +39,8 @@ class Rewards(db.Model, UserMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     reward_points = db.Column(db.Integer)
 
+    user = relationship("User", backref="rewards")
+
 
 
 
