@@ -85,9 +85,7 @@
             <div class="hotel-cards">
                 {% set ns = namespace(hotels_not_available = 0) %}
                 {% set ns_availability = namespace(is_available = True) %}
-
                 {% for hotel in hotel_data.data %}
-                    <p>Jinja logic running</p>
                     <!-- Loop through all bookings -->
                     {% for booking in booked_hotels %}
                         {% if hotel.name == booking.hotelName %}
@@ -97,7 +95,6 @@
                             {% if booking_checkIn <= checkOut_datetime and booking_checkOut >= checkIn_datetime %}
                                 {% set ns_availability.is_available = False %}
                                 {% set ns.hotels_not_available = ns.hotels_not_available + 1 %}
-
                                 <!-- Append unavailable hotel info -->
                                 {% set unavailable_hotel_info = {
                                     'hotelId': hotel.hotelId,
@@ -105,7 +102,7 @@
                                     'hotelLocation': hotel.address.countryCode,
                                     'hotelDistance': hotel.distance.value,
                                     'hotelDistanceUnit': hotel.distance.unit,
-                                }
+                                    }
                                 %}
                                 {% set ns_unavailable_hotels = ns_unavailable_hotels.unavailable_hotels.append(unavailable_hotel_info) %}
                             {% endif %}
@@ -127,8 +124,6 @@
                     {% endif %}
                     {% set ns_availability.is_available = True %}
                 {% endfor %}
-                <p>Hotels not available: {{ ns.hotels_not_available }}</p>
-
                 <div class="book-now-modal">
                     <div class="modal-content">
                         <span id="closeModalBtn" class="close">&times;</span>
@@ -169,11 +164,9 @@
             </div>
     </div>
 </div>
-
-<div class="top-container">
+<!--<div class="top-container">
     <h1>There are currently {{ hotel_data.meta.count }} hotels available
         in the {{ hotel_data.meta.iata }} area</h1>
-    <!-- Debugging -->
     <p>Number of booked hotels: {{ num_booked_hotels }}</p>
     <p>Check In: {{ checkIn }}</p>
     <p>Check Out: {{ checkOut }}</p>
@@ -181,8 +174,7 @@
     <p>Check Out Datetime: {{ checkOut_datetime }}</p>
     <p>Guests: {{ guests }}</p>
     <p>Rooms: {{ rooms }}</p>
-</div>
-
+</div>-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     var modal = document.querySelector('.book-now-modal');
@@ -270,6 +262,12 @@ function generateRandomPrice() {
         window.location.href = url;
     }
 
+    document.querySelector('.hotel-cards').addEventListener('click', function (event) {
+        if (event.target.closest('.hotel-card')) {
+            var hotelId = event.target.closest('.hotel-card').dataset.hotelId;
+            redirectToHotelView(hotelId);
+        }
+    });
     // Define a variable to store the current sorting option
     var currentSortingOption = 'distance';
 
@@ -286,7 +284,6 @@ function generateRandomPrice() {
     function updateHotelCards() {
         var hotelContainer = document.querySelector('.hotel-cards');
         var hotelCards = Array.from(hotelContainer.querySelectorAll('.hotel-card'));
-
         // Sort hotel cards based on the selected option
         hotelCards.sort(function (a, b) {
             if (currentSortingOption === 'distance') {
