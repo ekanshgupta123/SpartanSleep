@@ -118,3 +118,42 @@ label {
 	background-color: #F2F6FF;
 	border-color: #949494;
   }
+
+  .unavailable-hotel-card {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 100%;
+	max-height: 250px;
+	margin: 10px auto;
+	padding: 10px;
+	background-color: rgb(255, 176, 176);
+	border-radius: 10px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 3px 5px rgba(0, 0, 0, 0.24);
+  }
+
+  .unavailable-hotel-card-img {
+	width: 250px;
+	height: 250px;
+	background-image: url(https://cf.bstatic.com/xdata/images/hotel/max1024x768/257274098.jpg?k=33f2318a76a8492b4e6e39cbda6591b9840991dc1d7ad4c0616087a249c5ca09&o=&hp=1);
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	border-radius: 10px 0 0 10px;
+	margin-left: -10px;
+  }
+
+  .unavailable-hotel-card-details {
+	flex: 1;
+  	padding: 10px;
+}
+
+  .unavailable-hotel-card-name {
+	font-size: 20px;
+  }
+
+  .unavailable-hotel-card-location {
+	font-size: 16px;
+  }
+
