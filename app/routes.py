@@ -335,11 +335,18 @@ def update_reservation_date(reservation_id):
 @login_required
 def hotel_searchs():
 #    return render_template('/hotel-search.html')
-# Get the value of the "cityCode" query parameter from the request
+    # Get the value of the "cityCode" query parameter from the request
     cityCode = request.args.get('cityCode')
 
-    # Construct the Amadeus API URL for hotel search based on the city and country
-    amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode={cityCode}&radius=15&radiusUnit=MILE&hotelSource=ALL"
+    # Get the value of the "distance" query parameter and convert to int IF it exists
+    radius = request.args.get('distance')
+    if radius is not None:
+        radius = int(radius)
+
+        # Set API URL to use the radius provided by the user
+        amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode={cityCode}&radius={radius}&radiusUnit=MILE&hotelSource=ALL"
+    else:
+        amadeus_api_url = f"https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode={cityCode}&radius=15&radiusUnit=MILE&hotelSource=ALL"
 
     # Set up headers with the API key
     headers = {
@@ -370,7 +377,7 @@ def hotel_searchs():
                 return render_template('hotel-search.html', hotel_data=hotel_data, 
                     authorized=current_user.is_authenticated, checkIn=checkIn, checkOut=checkOut, 
                     checkIn_datetime=checkIn_datetime, checkOut_datetime=checkOut_datetime,
-                    guests=guests, rooms=rooms, booked_hotels=booked_hotels, num_booked_hotels=num_booked_hotels)
+                    guests=guests, rooms=rooms, booked_hotels=booked_hotels, num_booked_hotels=num_booked_hotels, cityCode=cityCode)
             else:
                 return "Invalid hotel data format"
         else:
@@ -387,7 +394,6 @@ def hotel_searchs():
     except Exception as e:
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
-
 
 @spartan_app.route('/book')
 def hotel_book():
