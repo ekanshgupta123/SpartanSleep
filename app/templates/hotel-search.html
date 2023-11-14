@@ -70,9 +70,14 @@
         </div>
     </div>
     <div class="col-lg-5">
+        <!--<div>
+            <button onclick="sortByDistance()">Sort by Distance</button>
+            <button onclick="sortByPrice()">Sort by Price</button>
+        </div>-->        
             <div class="hotel-cards">
                 {% set ns = namespace(hotels_not_available = 0) %}
                 {% set ns_availability = namespace(is_available = True) %}
+                {% set ns_unavailable_hotels = namespace(unavailable_hotels = []) %}
                 {% for hotel in hotel_data.data %}
                     <!-- Loop through all bookings -->
                     {% for booking in booked_hotels %}
@@ -83,6 +88,16 @@
                             {% if booking_checkIn <= checkOut_datetime or booking_checkOut >= checkIn_datetime %}
                                 {% set ns_availability.is_available = False %}
                                 {% set ns.hotels_not_available = ns.hotels_not_available + 1 %}
+
+                                {% set unavailable_hotel_info = {
+                                    'hotelId': hotel.hotelId,
+                                    'hotelName': hotel.name,
+                                    'hotelLocation': hotel.address.countryCode,
+                                    'hotelDistance': hotel.distance.value,
+                                    'hotelDistanceUnit': hotel.distance.unit,
+                                }
+                                %}
+                                {% set ns_unavailable_hotels = ns_unavailable_hotels.unavailable_hotels.append(unavailable_hotel_info) %}
                                 <p>{{ hotel.name }} is currently unavailable for your desired booking period.</p>
                             {% endif %}
                         {% endif %}
@@ -91,19 +106,34 @@
                     {% if ns_availability.is_available %}
                     <a href="#" onclick="redirectToHotelView('{{ hotel.hotelId }}')">
                         <div class="hotel-card" data-hotel-id="{{ hotel.hotelId }}" data-random-price="">
-                                <div class="hotel-card-image"></div>
-                                <div class="hotel-card-details">
-                                <h3 class="hotel-card-name">{{ hotel.name }}</h3>
-                                <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
-                                <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
-                                <p class="hotel-card-price"></p>
-                                </div>
+                            <div class="hotel-card-image"></div>
+                            <div class="hotel-card-details">
+                            <h3 class="hotel-card-name">{{ hotel.name }}</h3>
+                            <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
+                            <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+                            <p class="hotel-card-price"></p>
                             </div>
-                        </a>
+                        </div>
+                    </a>
                     {% endif %}
                     {% set ns_availability.is_available = True %}
                 {% endfor %}
                 <p>Hotels not available: {{ ns.hotels_not_available }}</p>
+
+                {% for hotel in ns_unavailable_hotels.unavailable_hotels %}
+                    <a href="#" onclick="redirectToHotelView('{{ hotel.hotelId }}')">
+                        <div class="hotel-card" data-hotel-id="{{ hotel.hotelId }}" data-random-price="">
+                            <div class="hotel-card-image"></div>
+                            <div class="hotel-card-details">
+                            <h3 class="hotel-card-name">{{ hotel.hotelName }}</h3>
+                            <p class="hotel-card-location">{{ hotel.hotelLocation }}</p>
+                            <p class="hotel-card-distance">Distance: {{ hotel.hotelDistance }} {{ hotel.hotelDistanceUnit }}</p>
+                            <p class="hotel-card-price"></p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+
                 <div class="book-now-modal">
                     <div class="modal-content">
                         <span id="closeModalBtn" class="close">&times;</span>
@@ -231,6 +261,47 @@ function generateRandomPrice() {
         // Redirect to the hotel view page
         window.location.href = url;
     }
+
+    // Define a variable to store the current sorting option
+    /*var currentSortingOption = 'distance';
+
+    function sortByDistance() {
+        currentSortingOption = 'distance';
+        updateHotelCards();
+    }
+
+    function sortByPrice() {
+        currentSortingOption = 'price';
+        updateHotelCards();
+    }
+
+    function updateHotelCards() {
+        var hotelContainer = document.querySelector('.hotel-cards');
+        var hotelCards = Array.from(hotelContainer.querySelectorAll('.hotel-card'));
+
+        // Sort hotel cards based on the selected option
+        hotelCards.sort(function (a, b) {
+            if (currentSortingOption === 'distance') {
+                return parseFloat(a.querySelector('.hotel-card-distance').textContent.split(' ')[1]) - parseFloat(b.querySelector('.hotel-card-distance').textContent.split(' ')[1]);
+            } else if (currentSortingOption === 'price') {
+                return parseFloat(a.dataset.randomPrice) - parseFloat(b.dataset.randomPrice);
+            }
+        });
+
+        // Clear the current hotel container
+        hotelContainer.innerHTML = '';
+
+        // Append sorted hotel cards to the container
+        hotelCards.forEach(function (card) {
+            hotelContainer.appendChild(card);
+        });
+    }
+
+    // Initial sorting when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        updateHotelCards();
+    });*/
+
 </script>
 
 <!-- Footer Section Begin -->
