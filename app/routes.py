@@ -294,9 +294,11 @@ def aboutUs():
 @spartan_app.route('/reservations')
 @login_required
 def reservations():
+    user_id = current_user.id
+    reward_points = get_reward_points(user_id)
     user_bookings = db.session.query(Payment.hotelName, Payment.start_date, Payment.end_date, Payment.totalGuests, Payment.hotelRooms, Payment.price, Payment.id, Payment.cityCode, Payment.countryCode,).filter_by(user_id=current_user.id).all()
     print(len(user_bookings))
-    return render_template('/reservations.html', user_bookings=user_bookings)
+    return render_template('/reservations.html', user_bookings=user_bookings,reward_points=reward_points)
 
 # edit reservations date
 @spartan_app.route('/update_reservation_date/<int:reservation_id>', methods=['GET', 'POST'])
@@ -435,13 +437,11 @@ def hotel_book():
     except Exception as e:
         print(f"Error fetching hotel data from Amadeus API: {e}")
         return "An error occurred"
-#display current user rewards
 def get_reward_points(user_id):
     user = User.query.get(user_id)
     if user:
         return user.reward_points
     return None
-#calculate rewards
 
 @spartan_app.route('/checkout/<string:checkout_type>/<string:hotel_id>', methods=['GET', 'POST'])
 @login_required
@@ -519,12 +519,12 @@ def checkout(checkout_type, hotel_id):
             db.session.commit()
             flash('Payment Accepted!')
 
-            current_user.reward_points = (int(reward_points)+100)
+            current_user.reward_points += int(round(float(price) * 0.1))
             add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
             db.session.add(add_rewards)
             db.session.commit()
 
-            flash('Rewards Redeemed Successfully'.format(reward_points))
+            flash(f'Reward points have been added to your account')
             return redirect(url_for('reservations'))
 
         return render_template('checkout-pay-now.html', hotel_id=hotel_id, form=form)
@@ -544,6 +544,17 @@ def checkout(checkout_type, hotel_id):
         price = request.args.get("price")
 
         print(f"pay later checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}, price: {price}")
+        if current_user.reward_points >= 50:
+            current_user.reward_points = (int(reward_points)-50)
+            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
+            db.session.add(add_rewards)
+            db.session.commit()
+        else:
+            flash('Not enough rewards'.format(reward_points))
+            return redirect(url_for('reservations'))
+
+        flash('Rewards Redeemed Successfully'.format(reward_points))
+        return redirect(url_for('reservations'))
 
         rewards_form = RewardsForm()
         if rewards_form.validate_on_submit():
@@ -563,14 +574,6 @@ def checkout(checkout_type, hotel_id):
             )
             db.session.add(payment)
             db.session.commit()
-
-            current_user.reward_points = (int(reward_points)-100)
-            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
-            db.session.add(add_rewards)
-            db.session.commit()
-
-            flash('Rewards Redeemed Successfully'.format(reward_points))
-            return redirect(url_for('reservations'))
 
         return render_template('checkout-pay-later.html', hotel_id=hotel_id,rewards_form=RewardsForm(),reward_points=reward_points)  # Modify as needed
 
