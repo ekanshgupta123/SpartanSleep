@@ -544,17 +544,6 @@ def checkout(checkout_type, hotel_id):
         price = request.args.get("price")
 
         print(f"pay later checkIn: {start_date}, checkOut: {end_date}, guests: {total_guests}, rooms: {total_rooms}, price: {price}")
-        if current_user.reward_points >= 50:
-            current_user.reward_points = (int(reward_points)-50)
-            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
-            db.session.add(add_rewards)
-            db.session.commit()
-        else:
-            flash('Not enough rewards'.format(reward_points))
-            return redirect(url_for('reservations'))
-
-        flash('Rewards Redeemed Successfully'.format(reward_points))
-        return redirect(url_for('reservations'))
 
         rewards_form = RewardsForm()
         if rewards_form.validate_on_submit():
@@ -575,6 +564,12 @@ def checkout(checkout_type, hotel_id):
             db.session.add(payment)
             db.session.commit()
 
+            current_user.reward_points = (int(reward_points)-50)
+            add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
+            db.session.add(add_rewards)
+            db.session.commit()
+            flash('Rewards Redeemed Successfully'.format(reward_points))
+            return redirect(url_for('reservations'))
         return render_template('checkout-pay-later.html', hotel_id=hotel_id,rewards_form=RewardsForm(),reward_points=reward_points)  # Modify as needed
 
     else:
