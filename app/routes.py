@@ -657,13 +657,20 @@ def confirmBooking():
 
 @spartan_app.route('/delete-reservation/<int:payment_id>', methods=['POST'])
 def delete_reservation(payment_id):
+    user_id = current_user.id
+    reward_points = get_reward_points(user_id)
     payment = Payment.query.get_or_404(payment_id)
     if payment.user_id != current_user.id:
         # Prevent deletion if the current user does not own the reservation
         return jsonify({'error': 'Unauthorized to delete this reservation'}), 401
 
     try:
+        price = payment.price
         db.session.delete(payment)
+        db.session.commit()
+        current_user.reward_points -= int(round(float(price) * 0.1))
+        add_rewards = Rewards(user_id=current_user.id, reward_points=reward_points)
+        db.session.add(add_rewards)
         db.session.commit()
         return redirect(url_for('reservations'))
     except Exception as e:
