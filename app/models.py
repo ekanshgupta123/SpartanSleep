@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     lastName = db.Column(db.String(256), nullable=False)
     email = db.Column(db.String(256), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
-    reward_points = db.Column(db.Integer, default=0)
+    reward_points = db.Column(db.Integer, default=70)
     
 @login.user_loader
 def load_user(id):
