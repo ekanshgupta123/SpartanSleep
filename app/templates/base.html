@@ -76,17 +76,6 @@
             <nav class="mainmenu mobile-menu">
                 <ul>
                     <li class="active"><a href="{{url_for('homePage')}}">Home</a></li>
-                    <li><a href="./rooms.html">Rooms</a></li>
-                    <li><a href="{{ url_for('aboutUs') }}">About Us</a></li>
-                    <li><a href="./pages.html">Pages</a>
-                        <ul class="dropdown">
-                            <li><a href="./room-details.html">Room Details</a></li>
-                            <li><a href="#">Deluxe Room</a></li>
-                            <li><a href="#">Family Room</a></li>
-                            <li><a href="#">Premium Room</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="./blog.html">News</a></li>
                     <li><a href="{{url_for('login')}}">Account</a></li>
                         <ul class="dropdown">
                             <li><a href="{{url_for('login')}}">Login</a></li>
@@ -139,17 +128,7 @@
                                 <nav class="mainmenu">
                                     <ul>
                                         <li class="active"><a href="{{url_for('homePage')}}">Home</a></li>
-                                        <li><a href="./rooms.html">Rooms</a></li>
                                         <li><a href="{{url_for('aboutUs')}}">About Us</a></li>
-                                        <li><a href="./pages.html">Pages</a>
-                                            <ul class="dropdown">
-                                                <li><a href="./room-details.html">Room Details</a></li>
-                                                <li><a href="./blog-details.html">Blog Details</a></li>
-                                                <li><a href="#">Family Room</a></li>
-                                                <li><a href="#">Premium Room</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="./blog.html">News</a></li>
                                         {% if not current_user.is_authenticated %}
                                         <li><a href="{{url_for('login')}}">Account</a>
                                             <ul class="dropdown">
@@ -168,10 +147,7 @@
                                         </li>
                                         {% endif %}
                                     </ul>
-                                </nav>                             
-                                <div class="nav-right search-switch">
-                                    <i class="icon_search"></i>
-                                </div>
+                                </nav>
                             </div>
                         </div>
                     </div>
