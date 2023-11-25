@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+    <div class = "Redeem Rewards">
+        <div class = "container">
+            <div class="card">
+                <h5 class="card-header">Your Rewards: {{ reward_points }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Enjoy a free stay</h5>
+                </div>
+            </div>
+            <div class = "col-lg-6">
+                <form method = "POST" novalidate>
+                    {{rewards_form.hidden_tag()}}
+                    <p>{{ rewards_form.name.label }}<br>
+                        {{ rewards_form.name(class="form-control", size=255) }}
+                    </p>
+                    <p> {{ rewards_form.email.label}}<br>
+                        {{ rewards_form.email(class="form-control", size =255) }}
+                    </p>
+                    <p> {{ rewards_form.phone.label}}<br>
+                        {{ rewards_form.phone(class="form-control", size =255) }}
+                    </p>
+                    <p>
+                        {{ rewards_form.submit() }}
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

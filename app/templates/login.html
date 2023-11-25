@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block mycontent %}
+
+<!-- login form -->
+
+<style>
+	h2 {
+        text-align: center;
+        display: block;
+        font-size: 3em;
+        margin-bottom: 0.60em;
+           }
+</style>
+		
+		{% for message in get_flashed_messages() %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                {% endfor %}
+
+<div class = "login">
+<div class = "container">
+<div class = "col-lg-6">                        
+			<h2>Login</h2>
+			<form method = "POST" novalidate>
+				{{form.hidden_tag()}}
+			<p>{{ form.email.label }}<br>         
+			{{ form.email(class="form-control", size=32) }}
+			</p>
+			<p{{ form.password.label}}<br>
+                        {{ form.password(class="form-control", size =8) }}
+			</p>
+			<p>
+                         {{ form.remember_me.label }}<br>
+			 {{form.remember_me()}}
+			</p>
+			<p>
+                         {{ form.submit() }}
+			</p>
+                        
+                 </form>
+                 </div>
+                 </div>
+
+        </div>
+{% endblock %}

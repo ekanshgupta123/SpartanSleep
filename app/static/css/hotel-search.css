@@ -1,0 +1,159 @@
+input[type=checkbox]{
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+.label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+labels {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 85px;
+	height: 40px;
+	background: white;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+
+labels:after {
+	content: '';
+	position: absolute;
+	top: 4px;
+	left: 5px;
+	width: 30px;
+	height: 30px;
+	background: gray;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+
+input:checked + labels {
+	background: #bada55;
+}
+
+input:checked + labels:after {
+	left: calc(100% - 5px);
+	transform: translateX(-100%);
+}
+
+labels:active:after {
+	width: 130px;
+}
+
+// centering
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.top-container {
+    background-color: #222736;
+}
+
+.booking-form {
+    background: #3a7bd5c2;
+    padding: 44px 40px 50px 40px;
+    border-radius: 20px;
+  }
+
+  .booking-form h3 {
+	color: #e8ebef;
+	margin-bottom: 36px;
+  }
+
+  .booking-form form .city-option label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .booking-form form .check-date label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .booking-form form .select-option label {
+	font-size: 16px;
+	color: #e8ebef;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .filter-form {
+	background: #e8ecf5;
+    padding: 44px 40px 50px 40px;
+    border-radius: 20px;
+	margin-top: 15px;
+  }
+
+  .filter-form h3 {
+	color: #333333;
+	font-size: 36px;
+  }
+
+  .filter-form form .select-option label {
+	font-size: 16px;
+	color: #333333;
+	display: block;
+	margin-bottom: 10px;
+  }
+
+  .btn-primary {
+	color: #333333;
+	background-color: #F2F6FF;
+	border-color: #949494;
+  }
+
+  .unavailable-hotel-card {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 100%;
+	max-height: 250px;
+	margin: 10px auto;
+	padding: 10px;
+	background-color: rgb(255, 176, 176);
+	border-radius: 10px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 3px 5px rgba(0, 0, 0, 0.24);
+  }
+
+  .unavailable-hotel-card-img {
+	width: 250px;
+	height: 250px;
+	background-image: url(https://cf.bstatic.com/xdata/images/hotel/max1024x768/257274098.jpg?k=33f2318a76a8492b4e6e39cbda6591b9840991dc1d7ad4c0616087a249c5ca09&o=&hp=1);
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	border-radius: 10px 0 0 10px;
+	margin-left: -10px;
+  }
+
+  .unavailable-hotel-card-details {
+	flex: 1;
+  	padding: 10px;
+}
+
+  .unavailable-hotel-card-name {
+	font-size: 20px;
+  }
+
+  .unavailable-hotel-card-location {
+	font-size: 16px;
+  }
+

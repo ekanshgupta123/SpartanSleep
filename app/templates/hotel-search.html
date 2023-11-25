@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+  
+{% block mycontent %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/hotel-search.css') }}" type="text/css">
+<div class="row">
+    <div class="col-lg-3 align-self-start">
+        <div style="width: 95%;" class="booking-form">
+                <h3>Booking Your Hotel</h3>
+                <form action="/hotel-search" method="GET">
+                    <!-- City search -->
+                    <div class="city-option">
+                        <label for="cityCode">Enter a city code:</label>
+                        <input type="text" class="city-code" id="search-input" name="cityCode" placeholder="{{ cityCode }}">
+                    </div>
+                    <div class="check-date">
+                        <label for="date-in">Check In:</label>
+                        <input type="text" class="date-input" id="date-in" name="date-in" placeholder="{{ checkIn }}">
+                        <i class="icon_calendar"></i>
+                    </div>
+                    <div class="check-date">
+                        <label for="date-out">Check Out:</label>
+                        <input type="text" class="date-input" id="date-out" name="date-out" placeholder="{{ checkOut }}">
+                        <i class="icon_calendar"></i>
+                    </div>
+                    <div class="select-option">
+                        <label for="guest">Guests:</label>
+                            <select class="guestInputBox" id="guest" name="guest" placeholder="{{ guests }}">
+                                {% for i in range(1, 10) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="select-option">
+                        <label for="room">Rooms:</label>
+                            <select class="guestInputBox" id="room" name="room" placeholder="{{ rooms }}">
+                                {% for i in range(1, 10) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>            
+                    <button type="submit" class="btn btn-primary">Check Availability</button>
+                </form>
+        </div>
+        <div style="width: 95%;" class="filter-form">
+            <h3>Filter By: </h3>
+            <form action="/hotel-search" method="GET">
+                <!-- Hidden input fields to pass current search values -->
+                <input type="hidden" name="cityCode" value="{{ cityCode }}">
+                <input type="hidden" name="date-in" value="{{ checkIn }}">
+                <input type="hidden" name="date-out" value="{{ checkOut }}">
+                <input type="hidden" name="guests" value="{{ guests }}">
+                <input type="hidden" name="rooms" value="{{ rooms }}"> 
+                <!-- Filter by distance with current search values -->
+                <div class="select-option">
+                    <label for="guest">Distance:</label>
+                        <select class="guestInputBox" id="distance" name="distance">
+                            {% for i in range(1, 15) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                </div>
+                          
+                <button type="submit" class="btn btn-primary">Add filter</button>
+            </form>
+            <form action="/hotel-search" method="GET">
+                <!-- City search -->
+                <div class="select-option">
+                    <label for="guest">Price:</label>
+                        <select class="guestInputBox" id="guest" name="distance">
+                            {% for i in range(1, 15) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                </div>           
+                <button type="submit" class="btn btn-primary">Add filter</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div>
+            <button onclick="sortByDistance()">Sort by Distance</button>
+            <button onclick="sortByPrice()">Sort by Price</button>
+        </div>
+        {% set ns_unavailable_hotels = namespace(unavailable_hotels = []) %}
+            <div class="hotel-cards">
+                {% set ns = namespace(hotels_not_available = 0) %}
+                {% set ns_availability = namespace(is_available = True) %}
+                {% for hotel in hotel_data.data %}
+                    <!-- Loop through all bookings -->
+                    {% for booking in booked_hotels %}
+                        {% if hotel.name == booking.hotelName %}
+                            {% set booking_checkIn = booking.start_date %}
+                            {% set booking_checkOut = booking.end_date %}
+                            <!-- Check if hotel is available during inputted time --> 
+                            {% if booking_checkIn <= checkOut_datetime and booking_checkOut >= checkIn_datetime %}
+                                {% set ns_availability.is_available = False %}
+                                {% set ns.hotels_not_available = ns.hotels_not_available + 1 %}
+                                <!-- Append unavailable hotel info -->
+                                {% set unavailable_hotel_info = {
+                                    'hotelId': hotel.hotelId,
+                                    'hotelName': hotel.name,
+                                    'hotelLocation': hotel.address.countryCode,
+                                    'hotelDistance': hotel.distance.value,
+                                    'hotelDistanceUnit': hotel.distance.unit,
+                                    }
+                                %}
+                                {% set ns_unavailable_hotels = ns_unavailable_hotels.unavailable_hotels.append(unavailable_hotel_info) %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    <!-- If available display hotel card -->
+                    {% if ns_availability.is_available %}
+                    <a href="#" onclick="redirectToHotelView('{{ hotel.hotelId }}')">
+                        <div class="hotel-card" data-hotel-id="{{ hotel.hotelId }}" data-random-price="">
+                            <div class="hotel-card-image"></div>
+                            <div class="hotel-card-details">
+                            <h3 class="hotel-card-name">{{ hotel.name }}</h3>
+                            <p class="hotel-card-location">{{ hotel.address.countryCode }}</p>
+                            <p class="hotel-card-distance">Distance: {{ hotel.distance.value }} {{ hotel.distance.unit }}</p>
+                            <p class="hotel-card-price"></p>
+                            </div>
+                        </div>
+                    </a>
+                    {% endif %}
+                    {% set ns_availability.is_available = True %}
+                {% endfor %}
+                <div class="book-now-modal">
+                    <div class="modal-content">
+                        <span id="closeModalBtn" class="close">&times;</span>
+                        <h5>Your payment options:</h5>
+                        <div class="modal-options">
+                            <div>
+                                <h6>Pay Now</h6>
+                                <ul>
+                                    <li>We will process your payment in your local currency</li>
+                                    <li>More ways to pay: use Debit/Credit card</li>
+                                </ul>
+                                <button id="payNowBtn" onclick="goToCheckout(this)">Pay Now</button>
+                            </div>
+                            <div>
+                                <h6>Pay when you stay</h6>
+                                <ul>
+                                    <li>You will not be charged until your stay</li>
+                                    <li> Pay the property directly in their preferred currency</li>
+                                </ul>
+                                <button id="payLaterBtn" onclick="goToCheckout(this)">Pay when you stay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="unavailable-hotel-cards">
+                {% for hotel in ns_unavailable_hotels.unavailable_hotels %}
+                    <div class="unavailable-hotel-card" data-hotel-id="{{ hotel.hotelId }}" data-random-price="">
+                        <div class="unavailable-hotel-card-img"></div>
+                        <div class="unavailable-hotel-card-details">
+                            <h3 class="unavailable-hotel-card-name">{{ hotel.hotelName }}</h3>
+                            <p class="unavailable-hotel-card-location">{{ hotel.hotelLocation }}</p>
+                            <p class="unavailable-hotel-card-distance">Distance: {{ hotel.hotelDistance }} {{ hotel.hotelDistanceUnit }}</p>
+                            <p>This hotel is unavailable during your desired booking period. Please try a different date.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+    </div>
+</div>
+<!--<div class="top-container">
+    <h1>There are currently {{ hotel_data.meta.count }} hotels available
+        in the {{ hotel_data.meta.iata }} area</h1>
+    <p>Number of booked hotels: {{ num_booked_hotels }}</p>
+    <p>Check In: {{ checkIn }}</p>
+    <p>Check Out: {{ checkOut }}</p>
+    <p>Check In Datetime: {{ checkIn_datetime }}</p>
+    <p>Check Out Datetime: {{ checkOut_datetime }}</p>
+    <p>Guests: {{ guests }}</p>
+    <p>Rooms: {{ rooms }}</p>
+</div>-->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.querySelector('.book-now-modal');
+    var closeModalBtn = document.getElementById('closeModalBtn');
+
+    // Function to open the modal
+    function openModal() {
+        modal.style.display = 'block';
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    // Attach click event to all 'Book Now' buttons
+    var bookNowButtons = document.querySelectorAll('.hotel-card-book-now-button');
+    // Assuming each hotel card has a data attribute 'data-hotel-id'
+    bookNowButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        var hotelId = this.dataset.hotelId;
+        var payNowBtn = document.getElementById('payNowBtn');
+        var payLaterBtn = document.getElementById('payLaterBtn');
+        payNowBtn.dataset.hotelId = hotelId;
+        payLaterBtn.dataset.hotelId = hotelId;
+        openModal();
+    });
+});
+
+    // Close the modal when the close button is clicked
+    closeModalBtn.addEventListener('click', closeModal);
+
+    // Close the modal if the user clicks outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+});
+
+function goToCheckout(checkoutType) {
+    var hotelId = document.getElementById('payNowBtn').dataset.hotelId; // Both buttons have the same hotel ID
+    if (hotelId) {
+        var checkoutUrl = '/checkout/' + checkoutType + '/' + hotelId;
+        window.location.href = checkoutUrl;
+    } else {
+        console.error('Hotel ID is not set');
+    }
+}
+
+function generateRandomPrice() {
+        return Math.floor(Math.random() * (280 - 130 + 1) / 15) * 15 + 130;
+    }
+
+    // Loop through hotel cards and set random prices
+    document.addEventListener("DOMContentLoaded", function () {
+        var hotelCards = document.querySelectorAll('.hotel-card');
+
+        hotelCards.forEach(function (card) {
+            // Generate random price
+            var randomPrice = generateRandomPrice();
+
+            // Add the price to the card
+            var priceElement = document.createElement('p');
+            priceElement.classList.add('hotel-card-price');
+            priceElement.textContent = 'Price: $' + randomPrice;
+
+            // Store the random price as a data attribute
+            card.dataset.randomPrice = randomPrice;
+
+            card.querySelector('.hotel-card-details').appendChild(priceElement);
+        });
+    });
+
+    // Function to handle the click event and redirect to the hotel view
+    function redirectToHotelView(hotelId) {
+        // Get the random price for the clicked hotel
+        var randomPrice = document.querySelector('.hotel-card[data-hotel-id="' + hotelId + '"]').dataset.randomPrice;
+
+        // Build the URL with the generated price
+        var url = "/hotel-view/" + hotelId +
+            "?checkIn={{ checkIn }}&checkOut={{ checkOut }}&guests={{ guests }}&rooms={{ rooms }}&price=" + randomPrice;
+
+        // Redirect to the hotel view page
+        window.location.href = url;
+    }
+
+    document.querySelector('.hotel-cards').addEventListener('click', function (event) {
+        if (event.target.closest('.hotel-card')) {
+            var hotelId = event.target.closest('.hotel-card').dataset.hotelId;
+            redirectToHotelView(hotelId);
+        }
+    });
+    // Define a variable to store the current sorting option
+    var currentSortingOption = 'distance';
+
+    function sortByDistance() {
+        currentSortingOption = 'distance';
+        updateHotelCards();
+    }
+
+    function sortByPrice() {
+        currentSortingOption = 'price';
+        updateHotelCards();
+    }
+
+    function updateHotelCards() {
+        var hotelContainer = document.querySelector('.hotel-cards');
+        var hotelCards = Array.from(hotelContainer.querySelectorAll('.hotel-card'));
+        // Sort hotel cards based on the selected option
+        hotelCards.sort(function (a, b) {
+            if (currentSortingOption === 'distance') {
+                return parseFloat(a.querySelector('.hotel-card-distance').textContent.split(' ')[1]) - parseFloat(b.querySelector('.hotel-card-distance').textContent.split(' ')[1]);
+            } else if (currentSortingOption === 'price') {
+                return parseFloat(a.dataset.randomPrice) - parseFloat(b.dataset.randomPrice);
+            }
+        });
+
+        // Clear the current hotel container
+        hotelContainer.innerHTML = '';
+
+        // Append sorted hotel cards to the container
+        hotelCards.forEach(function (card) {
+            hotelContainer.appendChild(card);
+        });
+    }
+
+    // Initial sorting when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        updateHotelCards();
+    });
+
+</script>
+
+<!-- Footer Section Begin -->
+<footer class="footer-section">
+            <div class="container">
+                <div class="footer-text">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="ft-about">
+                                <div class="logo">
+                                    <a href="#">
+                                        <img src="img/footer-logo.png" alt="">
+                                    </a>
+                                </div>
+                                <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
+                                <div class="fa-social">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-tripadvisor"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                    <a href="#"><i class="fa fa-youtube-play"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 offset-lg-1">
+                            <div class="ft-contact">
+                                <h6>Contact Us</h6>
+                                <ul>
+                                    <li>(12) 345 67890</li>
+                                    <li>info.colorlib@gmail.com</li>
+                                    <li>856 Cordia Extension Apt. 356, Lake, United State</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 offset-lg-1">
+                            <div class="ft-newslatter">
+                                <h6>New latest</h6>
+                                <p>Get the latest updates and offers.</p>
+                                <form action="#" class="fn-form">
+                                    <input type="text" placeholder="Email">
+                                    <button type="submit"><i class="fa fa-send"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright-option">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <ul>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">Terms of use</a></li>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Environmental Policy</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="co-text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+      Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</footer>
+
+{% endblock %}
+
