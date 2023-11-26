@@ -81,8 +81,8 @@ def get_access_token():
     global access_token
 
     #api information for amadeus
-    client_id = 'eLWoFfHf0ngMXRZoClATedEWUIRAsFDB'
-    client_secret = '0oEEu6nk1da8MqeF'
+    client_id = 'ipJDnGizu7f9ouoZSIjUAlLbTMGNGqTd'
+    client_secret = 'tBqsgz4g9ECtLdDi'
     token_url = "https://test.api.amadeus.com/v1/security/oauth2/token"
 
     data = {
@@ -208,12 +208,19 @@ def hotel_view(hotel_id):
             rooms = request.args.get('rooms')
             price = request.args.get('price')
 
-            print(f"checkIn: {checkIn}, checkOut: {checkOut}, guests: {guests}, rooms: {rooms}")
+            # Adjust the format for parsing the date strings
+            checkIn_date = datetime.strptime(checkIn, '%d %B, %Y')
+            checkOut_date = datetime.strptime(checkOut, '%d %B, %Y')
+
+            # Calculate total days
+            total_days = (checkOut_date - checkIn_date).days
+
+            print(f"checkIn: {checkIn}, checkOut: {checkOut}, guests: {guests}, rooms: {rooms}, total: {total_days}")
 
             if isinstance(hotel_data, (dict, list)):
                 hotel_data = hotel_data["data"][0]
                 print("Hotel Name:", hotel_data['name'])
-                return render_template('hotel-view.html', hotel_data=hotel_data, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms, price=price)
+                return render_template('hotel-view.html', hotel_data=hotel_data, checkIn=checkIn, checkOut=checkOut, guests=guests, rooms=rooms, price=price, total_days=total_days)
             else:
                 return "Invalid hotel data format"
         else:
