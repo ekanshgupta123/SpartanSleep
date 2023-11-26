@@ -3,11 +3,14 @@
     <meta charset="utf-8" />
     <!--<meta name=description content="This site was generated with Anima. www.animaapp.com"/>-->
     <!-- <link rel="shortcut icon" type=image/png href="https://animaproject.s3.amazonaws.com/home/favicon.png" /> -->
+    <meta name="viewport" content="width=1600, maximum-scale=1.0" />
+    <link rel="shortcut icon" type="image/png" href="https://animaproject.s3.amazonaws.com/home/favicon.png" />
+    <meta name="og:type" content="website" />
     <meta name="twitter:card" content="photo" />
     <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='css/reservation.css') }}" />
     <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='css/paynowpopup.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/styleguide.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/globals.css') }}" />
+    <link rel="stylesheet" type="text/css" href="css/styleguide.css" />
+    <link rel="stylesheet" type="text/css" href="css/globals.css" />
 {% endblock %}
 {% block mycontent %}
     <input type="hidden" id="anPageName" name="page" value="reservation" />
@@ -118,6 +121,7 @@
       </div>    
       <div class="hotel-header-image-2qMuan">
         <div class="rectangle-0rin7r"></div>
+        app/static/img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg
         <img class="url-0rin7r" 
         src="{{ url_for('static',filename='img/reservation/reservation-url-6F03EA39-B70A-4E6B-BE00-538C335CD152.jpg') }}" alt="url" />
       </div>
@@ -125,6 +129,8 @@
     <button class="hotel-card-book-now-button" data-hotel-id="{{ hotel_data.hotelId }}" data-check-in="{{ checkIn }}" data-check-out="{{ checkOut }}" data-guests="{{ guests }}" data-rooms="{{ rooms }}" data-price="{{ price }}">Book Now</button>
 
     <div class="book-now-modal">
+        <div class="modal-content">
+            <span id="closeModalBtn" class="close">&times;</span>
     <input type="hidden" id="hotel-card-book-now-button" name="page" value="paynowpopup" />
         <div class="container-center-horizontal">
             <div class="paynowpopup screen">
@@ -133,28 +139,26 @@
                     <div class="redeem-your-rewards-UzrHx9" id="payLaterBtn" data-hotel-id="" onclick="goToCheckout('pay-later')">Redeem Your Rewards</div>
                     <img
                             class="line-UzrHx9"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-line-8D4B7E19-4333-47C5-B087-6ED52AE7014E@2x.png') }}"
+                            src="img/pay-now-popup-line-8D4B7E19-4333-47C5-B087-6ED52AE7014E@2x.png"
                             alt="Line"
                     />
                 </div>
                 <div class="price-per-night-LLtJDx">Price per night</div>
-                <div class="x397-LLtJDx avenir-heavy-normal-black-18px">${{ price }}</div>
-                <p class="total-price-excl-ta-LLtJDx">Total price: ${{ price }} x {{ total_days }} days </p>
-                {% set price = price | float %}
-                {% set total_days = total_days | int %}
-                <div class="x119000-LLtJDx avenir-heavy-normal-black-18px"> $ {{ price * total_days }}</div>
+                <div class="x397-LLtJDx avenir-heavy-normal-black-18px">$397</div>
+                <p class="total-price-excl-ta-LLtJDx">Total price excl. taxes and fees</p>
+                <div class="x119000-LLtJDx avenir-heavy-normal-black-18px">$1,190.00</div>
                 <div class="pay-button-LLtJDx">
+                    <div class="rectangle-loQjBM"></div>
                     <div class="pay-now-loQjBM">Pay Now
                         <button id="payNowBtn" data-hotel-id="" onclick="goToCheckout('pay-now')">Pay Now</button>
                     </div>
                 </div>
                 <div class="modal-options">
                     <div class="oval-o0Zepj"></div>
-                    
                     <div class="view-o0Zepj">
                         <img
                                 class="path-olwGrp"
-                                src="{{ url_for('static',filename='img/reservation/pay-now-popup-path-57BB45E3-7658-4014-8F93-EDB52FA4D088@2x.png') }}"
+                                src="img/pay-now-popup-path-57BB45E3-7658-4014-8F93-EDB52FA4D088@2x.png"
                                 alt="Path"
                         />
                     </div>
@@ -163,37 +167,37 @@
                 <div class="payment-method-icons-LLtJDx">
                     <img
                             class="apple-pay-WEChdR"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-applepay-F8532403-D85C-4B5A-BC13-8667853DCA14@2x.png') }}"
+                            src="img/pay-now-popup-applepay-F8532403-D85C-4B5A-BC13-8667853DCA14@2x.png"
                             alt="ApplePay"
                     />
                     <img
                             class="google-pay-WEChdR"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-googlepay-7B467B5E-9959-4222-BD57-6794E897726D@2x.png') }}"
+                            src="img/pay-now-popup-googlepay-7B467B5E-9959-4222-BD57-6794E897726D@2x.png"
                             alt="GooglePay"
                     />
                     <img
                             class="amex-WEChdR"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-amex-5D0A3874-FF70-4BF2-94BA-4F2E8BDEAC6F@2x.png') }}"
+                            src="img/pay-now-popup-amex-5D0A3874-FF70-4BF2-94BA-4F2E8BDEAC6F@2x.png"
                             alt="Amex"
                     />
                     <img
                             class="visa-WEChdR"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-visa-970C1E5D-B168-4997-811A-1EE83ABAE6E1@2x.png') }}"
+                            src="img/pay-now-popup-visa-970C1E5D-B168-4997-811A-1EE83ABAE6E1@2x.png"
                             alt="Visa"
                     />
                     <img
                             class="mastercard-WEChdR"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-mastercard-8E80ABD1-FDFA-4321-AE2F-99663C33CE06@2x.png') }}"
+                            src="img/pay-now-popup-mastercard-8E80ABD1-FDFA-4321-AE2F-99663C33CE06@2x.png"
                             alt="Mastercard"
                     />
                     <img
                             class="pay-pal-WEChdR"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-paypal-61E317E4-44E9-4E7A-B42A-7374AF04B6C6@2x.png') }}"
+                            src="img/pay-now-popup-paypal-61E317E4-44E9-4E7A-B42A-7374AF04B6C6@2x.png"
                             alt="PayPal"
                     />
                     <img
                             class="bitcoin-WEChdR"
-                            src="{{ url_for('static',filename='img/reservation/pay-now-popup-bitcoin-CE237E73-5E94-4D93-A003-0AA5BBFE56A8@2x.png') }}"
+                            src="img/pay-now-popup-bitcoin-CE237E73-5E94-4D93-A003-0AA5BBFE56A8@2x.png"
                             alt="Bitcoin"
                     />
 
