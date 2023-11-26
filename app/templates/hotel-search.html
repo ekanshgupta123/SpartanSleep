@@ -41,40 +41,6 @@
                     <button type="submit" class="btn btn-primary">Check Availability</button>
                 </form>
         </div>
-        <div style="width: 95%;" class="filter-form">
-            <h3>Filter By: </h3>
-            <form action="/hotel-search" method="GET">
-                <!-- Hidden input fields to pass current search values -->
-                <input type="hidden" name="cityCode" value="{{ cityCode }}">
-                <input type="hidden" name="date-in" value="{{ checkIn }}">
-                <input type="hidden" name="date-out" value="{{ checkOut }}">
-                <input type="hidden" name="guests" value="{{ guests }}">
-                <input type="hidden" name="rooms" value="{{ rooms }}"> 
-                <!-- Filter by distance with current search values -->
-                <div class="select-option">
-                    <label for="guest">Distance:</label>
-                        <select class="guestInputBox" id="distance" name="distance">
-                            {% for i in range(1, 15) %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                </div>
-                          
-                <button type="submit" class="btn btn-primary">Add filter</button>
-            </form>
-            <form action="/hotel-search" method="GET">
-                <!-- City search -->
-                <div class="select-option">
-                    <label for="guest">Price:</label>
-                        <select class="guestInputBox" id="guest" name="distance">
-                            {% for i in range(1, 15) %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                </div>           
-                <button type="submit" class="btn btn-primary">Add filter</button>
-            </form>
-        </div>
     </div>
     <div class="col-lg-5">
         <div>
